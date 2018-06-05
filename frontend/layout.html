@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+        <title>Chat</title>
+    </head>
+    
+    <header>
+        <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"></a>
+        <nav>
+            <ul>
+                <li><a href="/sivu1/">Sivu 1</a></li>
+                <li><a href="/sivu2/">Sivu 2</a></li>
+                <li><a href="/sivu3/">Sivu 3</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <body>
+        {% block body %}
+        {% endblock %}
+    </body>
+    
+    <footer>
+    </footer>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+</html>
