@@ -1,0 +1,81 @@
+body
+{
+    color: #EAEAEA !important;
+    background: #171717 !important;
+}
+
+a.button
+{
+    color: #4CB4FA;
+    background-color: #000000 !important;
+    border: 3px solid #4CB4FA !important;
+}
+
+a.button:hover
+{
+    color: #63ff9f;
+    border: 3px solid #63ff9f !important;
+}
+
+#authenticateBody h1, p
+{
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: linear-gradient(135deg, #46B1FF, #63ff9f);
+}
+
+#switchMode
+{
+    color: #666;
+    background-color: #FFF;
+}
+
+
+
+.popupForm
+{
+    background-color: #252525;
+}
+
+input:not([type=submit])
+{
+    background-color: #101010;
+}
+
+input:not([type=submit])
+{
+    background-color: #101010;
+}
+
+
+header
+{
+    background: #282828;
+}
+
+
+footer span
+{
+    color: #FFF;
+}
+
+footer span.contrast
+{
+    color: #000;
+    background-color: #69F7A8;
+}
+
+
+
+
+textarea
+{
+    color: #FFF;
+    background-color: #181818;
+}
+
+.message span.messageContent
+{
+    color: #FFF;
+}
