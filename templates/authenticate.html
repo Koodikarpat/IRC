@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/static/css/style.css" rel="stylesheet">
+        <style>
+            header
+            {
+                display:none;
+            }
+            
+            body
+            {
+                color: #FFF;
+                background: linear-gradient(135deg, #46B1FF, #63ff9f);
+            }
+        </style>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="/static/js/script.js"></script>
+        <title>Chat</title>
+    </head>
+    
+    <header>
+        <a href="/"><img src="/static/img/logo.png"></a>
+        <nav>
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li><a href="/chat/">Chatti</a></li>
+                <li><a href="/logout/">Kirjaudu ulos</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <body>
+        <div id="authenticateBody">
+            <h1>Tervetuloa chattiin!</h1>
+            <p>Sinun on tunnistauduttava käyttääksesi chattia.</p>
+            <a id="revealLogin" class="button">Kirjaudu sisään</a>
+            <a id="revealSignup" class="button gray">Luo tunnus</a>
+        </div>
+        
+        <div id="loginPopup" class="popupForm">
+            <a class="hidePopup">×</a>
+            <h1>Kirjaudu sisään</h1>
+            <form>
+                <input type="text" name="username" placeholder="Käyttäjänimi">
+                <input type="password" name="password" placeholder="Salasana">
+                <input type="submit" value="Kirjaudu">
+                <span>Ei tunnusta? <a id="revealSignup">Luo tunnus</a></span>
+            </form>
+        </div>
+        
+        <div id="signupPopup" class="popupForm">
+            <a class="hidePopup">×</a>
+            <h1>Luo tunnus</h1>
+            <form>
+                <input type="text" name="username" placeholder="Käyttäjänimi">
+                <input type="email" id="signup_email" name="email" placeholder="Sähköpostiosoite"> <span id="signup_email_alert" style="color:red;"></span>
+                <input type="password" id="signup_password" name="password" placeholder="Salasana">
+                <input type="password" id="signup_password2" name="password2" placeholder="Salasana uudelleen"> <span   id="signup_password2_alert" style="color:red;"></span>
+                <input type="submit" value="Rekisteröidy">
+                <span>Ei tunnusta? <a id="revealSignup">Luo tunnus</a></span>
+            </form>
+        </div>
+        
+        <footer>
+            <span>Made by</span><span class="contrast">Koodikärpät 2018</span>
+        </footer>
+
+    </body>
+    
+</html>
