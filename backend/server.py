@@ -5,15 +5,28 @@ from http import HTTPStatus
 from http.cookies import SimpleCookie
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from time import time
-from urllib.parse import unquote, _NetlocResultMixinStr
+from urllib.parse import parse_qsl, unquote
 from uuid import uuid4
+
+from passlib.context import CryptContext
+
+from backend.db import User
+
+context = CryptContext(
+    schemes=['bcrypt_sha256', 'scrypt'],
+    default='bcrypt_sha256'
+)
+
+
+class LoginError(Exception):
+    pass
 
 
 class Handler(SimpleHTTPRequestHandler):
     """
     Makes it able to give the handler a directory to serve from.
 
-    Mostly Python 3.7 code backported.
+    Directory code mostly Python 3.7 code backported.
     """
     sessions = {}
 
@@ -21,11 +34,10 @@ class Handler(SimpleHTTPRequestHandler):
         if directory is None:
             directory = os.getcwd()
         self.directory = directory
-        self.morsel = None
 
         super().__init__(*args, **kwargs)
 
-    def get_cookie(self):
+    def get_cookie(self) -> SimpleCookie:
         client_cookies = self.headers.get('Cookies', '')
         return SimpleCookie(client_cookies)
 
@@ -40,7 +52,7 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header('Set-Cookie', cookie['session_id'].OutputString())
 
     @property
-    def logged_in(self):
+    def is_logged_in(self) -> bool:
         cookie = self.get_cookie()
         session_id = cookie.get('session_id')
 
@@ -50,7 +62,25 @@ class Handler(SimpleHTTPRequestHandler):
             return False
         return True
 
-    def translate_path(self, path: str):
+    def get_form(self) -> dict:
+        size = self.headers.get('Content-Length')
+
+        if size is None:
+            raise ValueError('???')
+
+        data = self.rfile.read(int(size))
+        return dict(parse_qsl(data.decode()))
+
+    def validate_login(self, form: dict):
+        try:
+            user = User.objects.get(username=form['username'])
+        except User.DoesNotExist:
+            raise LoginError('That username does not exist.')
+
+        if not context.verify(form['password'], user.password):
+            raise LoginError('Invalid password.')
+
+    def translate_path(self, path: str) -> str:
         path, *_ = path.split('?', 1)
         path, *_ = path.split('#', 1)
         path = path.strip()
@@ -71,11 +101,14 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         if self.path == '/login':
-            self.send_response(200)
-            self.success_login()
-            self.end_headers()
-            return
-        self.send_response(HTTPStatus.BAD_REQUEST)
+            form = self.get_form()
+            try:
+                self.validate_login(form)
+            except LoginError as e:
+                # TODO flash error message to user
+                self.send_response(HTTPStatus.BAD_REQUEST)
+        else:
+            self.send_response(HTTPStatus.BAD_REQUEST)
 
 
 class ThreadedServer(socketserver.ThreadingMixIn, HTTPServer):
