@@ -10,20 +10,13 @@ from uuid import uuid4
 
 from passlib.context import CryptContext
 
+from backend import errors
 from backend.db import User
 
 context = CryptContext(
     schemes=["argon2", "bcrypt_sha256", "scrypt"],
     default="argon2"
 )
-
-
-class LoginError(Exception):
-    pass
-
-
-class SignupError(Exception):
-    pass
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -80,10 +73,10 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             user = User.objects.get(username=form['username'])
         except User.DoesNotExist:
-            raise LoginError('That username does not exist.')
+            raise errors.LoginError('That username does not exist.')
 
         if not context.verify(form['password'], user.password):
-            raise LoginError('Invalid password.')
+            raise errors.LoginError('Invalid password.')
 
     def signup(self, form: dict):
         try:
@@ -91,7 +84,7 @@ class Handler(SimpleHTTPRequestHandler):
         except User.DoesNotExist:
             pass
         else:
-            raise SignupError('An username with that name already exists.')
+            raise errors.SignupError('An username with that name already exists.')
 
         try:
             user = User(
@@ -130,7 +123,7 @@ class Handler(SimpleHTTPRequestHandler):
             form = self.get_form()
             try:
                 self.validate_login(form)
-            except LoginError as e:
+            except errors.LoginError as e:
                 # TODO flash error message to user
                 self.send_error(HTTPStatus.BAD_REQUEST)
             else:
@@ -143,7 +136,7 @@ class Handler(SimpleHTTPRequestHandler):
             form = self.get_form()
             try:
                 self.signup(form)
-            except SignupError as e:
+            except errors.SignupError as e:
                 print(str(e))
                 self.send_error(HTTPStatus.BAD_REQUEST)
         else:
