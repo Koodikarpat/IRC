@@ -139,10 +139,49 @@ $(document).ready(function() {
     // http requests n stuff
     
     
-    var form_login = document.getElementById("login");
+	$("#login").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_login = document.getElementById("login");
+		var xhr_login = new XMLHttpRequest();
+
+        xhr_login.open('POST', "/login/", true);
+        
+        var formData_login = new FormData(form_login);
+
+        xhr_login.setRequestHeader("Content-length", formData_login.length);
+        xhr_login.setRequestHeader("Connection", "close");
+		
+		var object_login = {};
+		formData_login.forEach(function(value, key) {
+			object_login[key] = value;
+		});
+		var json_login = JSON.stringify(object_login);
+		
+		console.log(json_login);
+		
+        xhr_login.send(json_login);
+
+        xhr_login.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
+                // überfancy
+            }
+        }
+	});
     
-    $("#login_submit").click(function() {
-        var xhr_login = new XMLHttpRequest();
+// $("#login_submit").click(function() {
+//	login();
+//	});
+	
+	
+	/*
+	
+	jaa joo vanha login juttu
+	
+		var form_login = document.getElementById("login");
+		var xhr_login = new XMLHttpRequest();
 
         xhr_login.open('POST', "/login/", true);
         
@@ -161,7 +200,8 @@ $(document).ready(function() {
                 // überfancy
             }
         }
-    });
+		
+		*/
     
     
     
