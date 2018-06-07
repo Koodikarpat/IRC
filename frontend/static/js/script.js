@@ -141,23 +141,23 @@ $(document).ready(function() {
     
     var form_login = document.getElementById("login");
     
-    $("#login_submit").onclick(function() {
+    $("#login_submit").click(function() {
         var xhr_login = new XMLHttpRequest();
 
         xhr_login.open('POST', "/login/", true);
         
         var formData_login = new FormData(form_login);
-        formData_login.append('submit', true);
+        formData_login.append('login_submit', true);
 
         http.setRequestHeader("Content-length", formData_login.length);
         http.setRequestHeader("Connection", "close");
         
         xhr_login.send(formData_login);
 
-        xhr_login.addEventListener("readystatechange", processRequest, false)
+        xhr_login.addEventListener("readystatechange", processRequest, false);
 
         function processRequest(e) {
-            if(xhr_login.readyState == 4 && xhr.status == 200) {
+            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
                 // überfancy
             }
         }
