@@ -1,3 +1,4 @@
+import json
 import os
 import posixpath
 import socketserver
@@ -67,9 +68,8 @@ class Handler(SimpleHTTPRequestHandler):
             raise ValueError('???')
 
         data = self.rfile.read(int(size))
-        x = dict(parse_qsl(data.decode()))
-        print(x)
-        return x
+        print(data)
+        return json.loads(data)
 
     def validate_login(self, form: dict):
         try:
@@ -124,12 +124,13 @@ class Handler(SimpleHTTPRequestHandler):
         # TODO
         if self.path == '/login/':
             form = self.get_form()
+            print(form)
             try:
                 self.validate_login(form)
             except errors.LoginError as e:
                 # TODO flash error message to user
-                print('asdflashkdfjkl')
                 self.send_response(HTTPStatus.OK)
+                self.end_headers()
             else:
                 self.send_response(HTTPStatus.MOVED_PERMANENTLY)
                 self.success_login()

@@ -139,32 +139,103 @@ $(document).ready(function() {
     // http requests n stuff
     
     
-    var form_login = document.getElementById("login");
+	$("#login").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_login = document.getElementById("login");
+		var xhr_login = new XMLHttpRequest();
+
+        xhr_login.open('POST', "/login/", true);
+        
+        var formData_login = new FormData(form_login);
+
+        xhr_login.setRequestHeader("Content-length", formData_login.length);
+        xhr_login.setRequestHeader("Connection", "close");
+
+		var object_login = {};
+		formData_login.forEach(function(value, key) {
+			object_login[key] = value;
+		});
+		var json_login = JSON.stringify(object_login);
+
+		console.log(json_login);
+        xhr_login.send(json_login);
+
+        xhr_login.onreadystatechange = function() {
+        console.log(this);
+            if(this.status == 200) {
+                console.log("a");
+                // überfancy
+            }
+        }
+	});
+	
+	$("#postmessage").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_postmessage = document.getElementById("postmessage");
+		var xhr_postmessage = new XMLHttpRequest();
+
+        xhr_postmessage.open('POST', "/postmessage/", true);
+        
+        var formData_postmessage = new FormData(form_postmessage);
+
+        xhr_postmessage.setRequestHeader("Content-length", formData_postmessage.length);
+        xhr_postmessage.setRequestHeader("Connection", "close");
+		
+		var post_user = "aliylikoski123";
+		var post_timestamp = new Date();
+		
+		var object_postmessage = {"username":post_user,"timestamp":post_timestamp};
+		formData_postmessage.forEach(function(value, key) {
+			object_postmessage[key] = value;
+		});
+		var json_postmessage = JSON.stringify(object_postmessage);
+		
+		console.log(json_postmessage);
+		
+        xhr_postmessage.send(json_postmessage);
+
+        xhr_postmessage.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_postmessage.readyState == 4 && xhr_postmessage.status == 200) {
+                // überfancy
+            }
+        }
+	});
     
-    $("#asdfhkjkasdf").click(function() {
-        console.log("a");
-        var xhr_login = new XMLHttpRequest();
+// $("#login_submit").click(function() {
+//	login();
+//	});
+	
+	
+	/*
+	
+	jaa joo vanha login juttu
+	
+		var form_login = document.getElementById("login");
+		var xhr_login = new XMLHttpRequest();
 
         xhr_login.open('POST', "/login/", true);
         
         var formData_login = new FormData(form_login);
         formData_login.append('login_submit', true);
 
-        xhr_login.setRequestHeader("Content-length", formData_login.length);
-        xhr_login.setRequestHeader("Connection", "close");
+        http.setRequestHeader("Content-length", formData_login.length);
+        http.setRequestHeader("Connection", "close");
         
-        xhr_login.addEventListener("readystatechange", processRequest, false)
-        console.log(formData_login);
         xhr_login.send(formData_login);
-        alert("asfjhkasdf");
 
+        xhr_login.addEventListener("readystatechange", processRequest, false);
 
         function processRequest(e) {
             if(xhr_login.readyState == 4 && xhr_login.status == 200) {
-                alert(xhr_login.response);
+                // überfancy
             }
         }
-    });
+		
+		*/
     
     
     
