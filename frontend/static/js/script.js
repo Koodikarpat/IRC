@@ -171,6 +171,38 @@ $(document).ready(function() {
         }
 	});
 	
+	$("#signup").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_signup = document.getElementById("signup");
+		var xhr_signup = new XMLHttpRequest();
+
+        xhr_signup.open('POST', "/register/", true);
+        
+        var formData_signup = new FormData(form_signup);
+
+        xhr_signup.setRequestHeader("Content-length", formData_signup.length);
+        xhr_signup.setRequestHeader("Connection", "close");
+		
+		var object_signup = {};
+		formData_signup.forEach(function(value, key) {
+			object_signup[key] = value;
+		});
+		var json_signup = JSON.stringify(object_signup);
+		
+		console.log(json_signup);
+		
+        xhr_signup.send(json_signup);
+
+        xhr_signup.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
+                // überfancy
+            }
+        }
+	});
+	
 	$("#postmessage").on('submit', function(e) {
 		e.preventDefault();
 		
@@ -205,58 +237,6 @@ $(document).ready(function() {
             }
         }
 	});
-    
-// $("#login_submit").click(function() {
-//	login();
-//	});
-	
-	
-	/*
-	
-	jaa joo vanha login juttu
-	
-		var form_login = document.getElementById("login");
-		var xhr_login = new XMLHttpRequest();
-
-        xhr_login.open('POST', "/login/", true);
-        
-        var formData_login = new FormData(form_login);
-        formData_login.append('login_submit', true);
-
-        http.setRequestHeader("Content-length", formData_login.length);
-        http.setRequestHeader("Connection", "close");
-        
-        xhr_login.send(formData_login);
-
-        xhr_login.addEventListener("readystatechange", processRequest, false);
-
-        function processRequest(e) {
-            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
-                // überfancy
-            }
-        }
-		
-		*/
-    
-    
-    
-    /* var xhr_signup = new XMLHttpRequest();
-    
-    xhr_signup.open('POST', "/register/", true);
-    xhr_signup.send();
-    
-    xhr_signup.addEventListener("readystatechange", processRequest, false)
-    
-    function processRequest(e) {
-        if(xhr_signup.readyState == 4 && xhr_signup.status == 200) {
-            // überfancy
-        }
-    }
-    
-    */
-    
-    
-    // login messages
     
     
 
