@@ -138,16 +138,21 @@ $(document).ready(function() {
     
     // http requests n stuff
     
-    function login() {
+    
+    var form_login = document.getElementById("login");
+    
+    $("#login_submit").onclick(function() {
         var xhr_login = new XMLHttpRequest();
-        var params = {'username': "abc", 'password': "abc"};
 
-        xhr_login.open('POST', "/login", true);
+        xhr_login.open('POST', "/login/", true);
+        
+        var formData_login = new FormData(form_login);
+        formData_login.append('submit', true);
 
-        http.setRequestHeader("Content-length", params.length);
+        http.setRequestHeader("Content-length", formData_login.length);
         http.setRequestHeader("Connection", "close");
-
-        xhr_login.send();
+        
+        xhr_login.send(formData_login);
 
         xhr_login.addEventListener("readystatechange", processRequest, false)
 
@@ -156,11 +161,11 @@ $(document).ready(function() {
                 // überfancy
             }
         }
-    }
+    });
     
     
     
-    var xhr_signup = new XMLHttpRequest();
+    /* var xhr_signup = new XMLHttpRequest();
     
     xhr_signup.open('POST', "/register/", true);
     xhr_signup.send();
@@ -172,6 +177,8 @@ $(document).ready(function() {
             // überfancy
         }
     }
+    
+    */
     
     
     // login messages
