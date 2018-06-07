@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/static/css/style.css" rel="stylesheet">
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="/static/js/script.js"></script>
+        <script src="/static/js/mode.js"></script>
+        <title>Chat</title>
+    </head>
+    
+    <header>
+        <a href="/"><img src="/static/img/logo.png"></a>
+        <nav>
+            <ul>
+                <li><a href="/">Etusivu</a></li>
+                <li><a href="/chat/">Chatti</a></li>
+                <li><a href="/logout/">Kirjaudu ulos</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <body>
+        
+        <div id="chatBody">
+            <div id="messages">
+                <div class="message me">
+                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">aliylikoski</span><br>
+                        <span class="messageContent">Tämä on testiviesti :DDD</span>
+                    </div>
+                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">jokuvaan</span><br>
+                        <span class="messageContent">Hei Ali :)</span>
+                    </div>
+                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/pekka1000.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">pekka1000</span><br>
+                        <span class="messageContent">Moikka</span>
+                    </div>
+                    <img src="/static/img/pekka1000.jpg" class="avatar avatar2">
+                </div>
+                <div class="message me">
+                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">aliylikoski</span><br>
+                        <span class="messageContent">Miten menee?</span>
+                    </div>
+                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
+                </div>
+                <div class="message me sameUserAsInPreviousMessage">
+                    <img src="/static/img/avatar.jpg" class="avatar avatar1" style="height:0px;">
+                    <div class="messageBody">
+                        <span class="messageContent">Tästä tulee vielä hyvä chatti</span>
+                    </div>
+                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">markku123</span><br>
+                        <span class="messageContent">:D</span>
+                    </div>
+                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
+                </div>
+                <div class="message me">
+                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">aliylikoski</span><br>
+                        <span class="messageContent">:D</span>
+                    </div>
+                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/pekka1000.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">pekka1000</span><br>
+                        <span class="messageContent">:D</span>
+                    </div>
+                    <img src="/static/img/pekka1000.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">jokuvaan</span><br>
+                        <span class="messageContent">:D</span>
+                    </div>
+                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
+                </div>
+                <div class="message">
+                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="username">markku123</span><br>
+                        <span class="messageContent">:D</span>
+                    </div>
+                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
+                </div>
+                <div class="message sameUserAsInPreviousMessage">
+                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
+                    <div class="messageBody">
+                        <span class="messageContent">Pitää mennä heippa</span>
+                    </div>
+                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
+                </div>
+            </div>
+            <div id="newMessage">
+                <form id="postmessage" method="post">
+                    <textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
+                    <input type="submit" value="Lähetä">
+                </form>
+            </div>
+        </div>
+        
+        <footer>
+            <span id="switchMode"></span>
+        </footer>
+        
+    </body>
+    
+</html>

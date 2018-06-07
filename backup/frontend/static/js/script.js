@@ -16,7 +16,7 @@ $(document).ready(function() {
     
     
     $(document).keyup(function(e) {
-        if(e.keyCode==27) {
+        if(e.keyCode==27) {
             hidePopup();
         }
     });
@@ -56,7 +56,7 @@ $(document).ready(function() {
     });
         
     function checkIfUsernameIsValid() {
-        if($("#signup_username").val() == "") {
+        if($("#signup_username").val() == "") {
             validUsername = false;
         } else {
             validUsername = true;
@@ -66,7 +66,7 @@ $(document).ready(function() {
     function checkIfEmailIsValid() {
         email = $("#signup_email").val();
         emailCheck = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if($("#signup_email").val() == "") {
+        if($("#signup_email").val() == "") {
             $("#signup_email_alert").fadeOut();
             $("#signup_email_alert").text("");
             validEmail = false;
@@ -82,7 +82,7 @@ $(document).ready(function() {
     }
     
     function checkIfPasswordsMatch() {
-        if($("#signup_password").val() == "" && $("#signup_password2").val() == "") {
+        if($("#signup_password").val() == "" && $("#signup_password2").val() == "") {
             $("#signup_password_alert").fadeOut();
             $("#signup_password_alert").text("");
             $("#signup_password2_alert").fadeOut();
@@ -151,20 +151,53 @@ $(document).ready(function() {
 
         xhr_login.setRequestHeader("Content-length", formData_login.length);
         xhr_login.setRequestHeader("Connection", "close");
-
+		
 		var object_login = {};
 		formData_login.forEach(function(value, key) {
 			object_login[key] = value;
 		});
 		var json_login = JSON.stringify(object_login);
-
+		
 		console.log(json_login);
+		
         xhr_login.send(json_login);
 
-        xhr_login.onreadystatechange = function() {
-        console.log(this);
-            if(this.status == 200) {
-                console.log("a");
+        xhr_login.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
+                // überfancy
+            }
+        }
+	});
+	
+	$("#signup").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_signup = document.getElementById("signup");
+		var xhr_signup = new XMLHttpRequest();
+
+        xhr_signup.open('POST', "/register/", true);
+        
+        var formData_login = new FormData(form_login);
+
+        xhr_login.setRequestHeader("Content-length", formData_login.length);
+        xhr_login.setRequestHeader("Connection", "close");
+		
+		var object_login = {};
+		formData_login.forEach(function(value, key) {
+			object_login[key] = value;
+		});
+		var json_login = JSON.stringify(object_login);
+		
+		console.log(json_login);
+		
+        xhr_login.send(json_login);
+
+        xhr_login.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
                 // überfancy
             }
         }
@@ -204,54 +237,6 @@ $(document).ready(function() {
             }
         }
 	});
-    
-// $("#login_submit").click(function() {
-//	login();
-//	});
-	
-	
-	/*
-	
-	jaa joo vanha login juttu
-	
-		var form_login = document.getElementById("login");
-		var xhr_login = new XMLHttpRequest();
-        xhr_login.open('POST', "/login/", true);
-        
-        var formData_login = new FormData(form_login);
-        formData_login.append('login_submit', true);
-        http.setRequestHeader("Content-length", formData_login.length);
-        http.setRequestHeader("Connection", "close");
-        
-        xhr_login.send(formData_login);
-        xhr_login.addEventListener("readystatechange", processRequest, false);
-        function processRequest(e) {
-            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
-                // überfancy
-            }
-        }
-		
-		*/
-    
-    
-    
-    /* var xhr_signup = new XMLHttpRequest();
-    
-    xhr_signup.open('POST', "/register/", true);
-    xhr_signup.send();
-    
-    xhr_signup.addEventListener("readystatechange", processRequest, false)
-    
-    function processRequest(e) {
-        if(xhr_signup.readyState == 4 && xhr_signup.status == 200) {
-            // überfancy
-        }
-    }
-    
-    */
-    
-    
-    // login messages
     
     
 
