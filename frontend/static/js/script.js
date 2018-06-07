@@ -170,6 +170,41 @@ $(document).ready(function() {
             }
         }
 	});
+	
+	$("#postmessage").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_postmessage = document.getElementById("postmessage");
+		var xhr_postmessage = new XMLHttpRequest();
+
+        xhr_postmessage.open('POST', "/postmessage/", true);
+        
+        var formData_postmessage = new FormData(form_postmessage);
+
+        xhr_postmessage.setRequestHeader("Content-length", formData_postmessage.length);
+        xhr_postmessage.setRequestHeader("Connection", "close");
+		
+		var post_user = "aliylikoski123";
+		var post_timestamp = new Date();
+		
+		var object_postmessage = {"username":post_user,"timestamp":post_timestamp};
+		formData_postmessage.forEach(function(value, key) {
+			object_postmessage[key] = value;
+		});
+		var json_postmessage = JSON.stringify(object_postmessage);
+		
+		console.log(json_postmessage);
+		
+        xhr_postmessage.send(json_postmessage);
+
+        xhr_postmessage.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if(xhr_postmessage.readyState == 4 && xhr_postmessage.status == 200) {
+                // überfancy
+            }
+        }
+	});
     
 // $("#login_submit").click(function() {
 //	login();
