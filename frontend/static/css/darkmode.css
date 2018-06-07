@@ -79,3 +79,14 @@ textarea
 {
     color: #FFF;
 }
+
+.message:not(.me) .messageBody .messageContent
+{
+    background-color: #1F4880;
+}
+
+.message.me .messageBody .messageContent
+{
+    color: #FFF;
+    background-color: #404040;
+}

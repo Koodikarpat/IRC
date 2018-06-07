@@ -280,6 +280,25 @@ form span a
 }
 
 
+#loginErrorMessage
+{
+    display: none;
+    position: fixed;
+    top: -1%;
+    left: calc(50% - 160px);
+    padding: 18px;
+    width: 320px;
+    color: #FFF;
+    font-size: 12pt;
+    font-weight: 500;
+    background-color: #ff6b6b;
+    border-radius: 6px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    opacity: 0;
+}
+
+
 
 
 /* Chat page */
@@ -304,15 +323,59 @@ form span a
     margin-top: 4px;
 }
 
+
+.message .messageBody
+{
+    position: relative;
+    top: -2px;
+}
+
+.message.me .messageBody
+{
+    width: calc(100% - 74px);
+    text-align: right;
+}
+
+.message .messageBody .messageContent
+{
+    display: inline-block;
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+
+.message:not(.me) .messageBody .messageContent
+{
+    color: #FFF;
+    background-color: #2965B5;
+}
+
+.message.me .messageBody .messageContent
+{
+    color: #000;
+    background-color: #EFEFEF;
+}
+
 .message img.avatar
 {
-    margin-right: 10px;
+    margin: 0 12px;
     height: 32px;
     width: 32px;
     border: 1px solid #BABABA;
     border-radius: 32px;
     vertical-align: text-top;
 }
+
+
+.message.me img.avatar1
+{
+    display: none;
+}
+
+.message:not(.me) img.avatar2
+{
+    display: none;
+}
+
 
 .message.sameUserAsInPreviousMessage img.avatar
 {

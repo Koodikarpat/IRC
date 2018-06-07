@@ -138,19 +138,51 @@ $(document).ready(function() {
     
     // http requests n stuff
     
-    var xhr = new XMLHttpRequest();
+    function login() {
+        var xhr_login = new XMLHttpRequest();
+        var params = {'username': "abc", 'password': "abc"};
+
+        xhr_login.open('POST', "/login", true);
+
+        http.setRequestHeader("Content-length", params.length);
+        http.setRequestHeader("Connection", "close");
+
+        xhr_login.send();
+
+        xhr_login.addEventListener("readystatechange", processRequest, false)
+
+        function processRequest(e) {
+            if(xhr_login.readyState == 4 && xhr.status == 200) {
+                // überfancy
+            }
+        }
+    }
     
-    xhr.open('POST', "linkki scriptiin tähän", true);
-    xhr.send();
     
-    xhr.addEventListener("readystatechange", processRequest, false)
+    
+    var xhr_signup = new XMLHttpRequest();
+    
+    xhr_signup.open('POST', "/register/", true);
+    xhr_signup.send();
+    
+    xhr_signup.addEventListener("readystatechange", processRequest, false)
     
     function processRequest(e) {
-        if(xhr.readyState == 4 && xhr.status == 200) {
+        if(xhr_signup.readyState == 4 && xhr_signup.status == 200) {
             // überfancy
         }
     }
     
     
+    // login messages
+    
+    
 
 });
+
+function loginErrorMessage(message) {
+    $("#loginErrorMessage").html(message);
+    $("#loginErrorMessage").show();
+    $("#loginErrorMessage").animate({top: "3%", opacity: "1"}, 200);
+    $("#loginErrorMessage").delay(5000).animate({top: "-1%", opacity: "0"}, 200);
+}
