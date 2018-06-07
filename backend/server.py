@@ -13,12 +13,16 @@ from passlib.context import CryptContext
 from backend.db import User
 
 context = CryptContext(
-    schemes=['bcrypt_sha256', 'scrypt'],
-    default='bcrypt_sha256'
+    schemes=["argon2", "bcrypt_sha256", "scrypt"],
+    default="argon2"
 )
 
 
 class LoginError(Exception):
+    pass
+
+
+class SignupError(Exception):
     pass
 
 
@@ -35,31 +39,32 @@ class Handler(SimpleHTTPRequestHandler):
             directory = os.getcwd()
         self.directory = directory
 
+        self._cookie = None
+
         super().__init__(*args, **kwargs)
 
-    def get_cookie(self) -> SimpleCookie:
-        client_cookies = self.headers.get('Cookies', '')
-        return SimpleCookie(client_cookies)
+    @property
+    def cookie(self) -> SimpleCookie:
+        if self._cookie is None:
+            self._cookie = SimpleCookie(self.headers.get('Cookies', ''))
+        return self._cookie
 
     def success_login(self):
-        cookie = self.get_cookie()
         session_id, now = uuid4(), time()
         self.sessions[session_id] = now
-        cookie['session_id'] = session_id
-        sess_cookie = cookie['session_id']
-        sess_cookie['max-age'] = 3600
-        sess_cookie['expires'] = self.date_time_string(now + 3600)
-        self.send_header('Set-Cookie', cookie['session_id'].OutputString())
+        self.cookie['session_id'] = session_id
+        self.cookie['session_id']['max-age'] = 3600
+        self.cookie['session_id']['expires'] = self.date_time_string(now + 3600)
+        self.send_header('Set-Cookie', self.cookie['session_id'].OutputString())
 
     @property
     def is_logged_in(self) -> bool:
-        cookie = self.get_cookie()
-        session_id = cookie.get('session_id')
-
+        session_id = self.cookie.get('session_id')
         if session_id is None:
             return False
-        elif self.sessions[session_id.value] - time() > 3600:
+        elif time() - self.sessions[session_id] > 3600:
             return False
+        self.sessions[session_id] = time()
         return True
 
     def get_form(self) -> dict:
@@ -79,6 +84,26 @@ class Handler(SimpleHTTPRequestHandler):
 
         if not context.verify(form['password'], user.password):
             raise LoginError('Invalid password.')
+
+    def signup(self, form: dict):
+        try:
+            user = User.objects.get(username=form['username'])
+        except User.DoesNotExist:
+            pass
+        else:
+            raise SignupError('An username with that name already exists.')
+
+        try:
+            user = User(
+                username=form['username'],
+                email=form['email'],
+                password=context.hash(form['password'])
+            )
+        except Exception as e:
+            # ???
+            print(str(e))
+        else:
+            user.save()
 
     def translate_path(self, path: str) -> str:
         path, *_ = path.split('?', 1)
@@ -100,15 +125,29 @@ class Handler(SimpleHTTPRequestHandler):
         return path + '/' * trailing_slash
 
     def do_POST(self):
+        # TODO
         if self.path == '/login':
             form = self.get_form()
             try:
                 self.validate_login(form)
             except LoginError as e:
                 # TODO flash error message to user
-                self.send_response(HTTPStatus.BAD_REQUEST)
+                self.send_error(HTTPStatus.BAD_REQUEST)
+            else:
+                self.success_login()
+                self.send_response(HTTPStatus.MOVED_PERMANENTLY)
+                self.send_header('Location', 'index.html')
+                self.end_headers()
+                # TODO
+        elif self.path == '/register':
+            form = self.get_form()
+            try:
+                self.signup(form)
+            except SignupError as e:
+                print(str(e))
+                self.send_error(HTTPStatus.BAD_REQUEST)
         else:
-            self.send_response(HTTPStatus.BAD_REQUEST)
+            self.send_error(HTTPStatus.BAD_REQUEST)
 
 
 class ThreadedServer(socketserver.ThreadingMixIn, HTTPServer):
