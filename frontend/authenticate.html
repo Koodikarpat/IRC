@@ -20,6 +20,7 @@
         </style>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="/static/js/script.js"></script>
+        <script src="/static/js/mode.js"></script>
         <title>Chat</title>
     </head>
     
@@ -45,28 +46,30 @@
         <div id="loginPopup" class="popupForm">
             <a class="hidePopup">×</a>
             <h1>Kirjaudu sisään</h1>
-            <form>
-                <input type="text" name="username" placeholder="Käyttäjänimi">
-                <input type="password" name="password" placeholder="Salasana">
-                <input type="submit" value="Kirjaudu">
-                <span>Ei tunnusta? <a id="revealSignup">Luo tunnus</a></span>
+            <form id="login" action="/login/" method="post">
+                <input type="text" id="login_username" name="username" placeholder="Käyttäjänimi"> <span id="login_username_alert" class="alert"></span><br>
+                <input type="password" id="login_password" name="password" placeholder="Salasana"> <span id="login_password_alert" class="alert"></span>
+                <input type="submit" id="login_submit" value="Kirjaudu" disabled="disabled">
+                <span class="authAlt">Eikö sinulla ole vielä tunnusta? <a id="revealSignup">Luo tunnus</a></span>
             </form>
+            <div id="loginErrorMessage"></div>
         </div>
         
         <div id="signupPopup" class="popupForm">
             <a class="hidePopup">×</a>
             <h1>Luo tunnus</h1>
-            <form>
-                <input type="text" name="username" placeholder="Käyttäjänimi">
-                <input type="email" id="signup_email" name="email" placeholder="Sähköpostiosoite"> <span id="signup_email_alert" style="color:red;"></span>
-                <input type="password" id="signup_password" name="password" placeholder="Salasana">
-                <input type="password" id="signup_password2" name="password2" placeholder="Salasana uudelleen"> <span   id="signup_password2_alert" style="color:red;"></span>
-                <input type="submit" value="Rekisteröidy">
-                <span>Ei tunnusta? <a id="revealSignup">Luo tunnus</a></span>
+            <form id="signup">
+                <input type="text" id="signup_username" name="username" placeholder="Käyttäjänimi"> <span id="signup_username_alert" class="alert"></span><br>
+                <input type="email" id="signup_email" name="email" placeholder="Sähköpostiosoite"> <span id="signup_email_alert" class="alert"></span><br>
+                <input type="password" id="signup_password" name="password" placeholder="Salasana"> <span id="signup_password_alert" class="alert"></span><br>
+                <input type="password" id="signup_password2" name="password2" placeholder="Salasana uudelleen"> <span id="signup_password2_alert" class="alert"></span>
+                <input type="submit" id="signup_submit" value="Rekisteröidy" disabled="disabled">
+                <span class="authAlt">Onko sinulla jo tunnus? <a id="revealLogin">Kirjaudu sisään</a></span>
             </form>
         </div>
         
         <footer>
+            <span id="switchMode"></span>
             <span>Made by</span><span class="contrast">Koodikärpät 2018</span>
         </footer>
 

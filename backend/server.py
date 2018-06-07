@@ -67,7 +67,9 @@ class Handler(SimpleHTTPRequestHandler):
             raise ValueError('???')
 
         data = self.rfile.read(int(size))
-        return dict(parse_qsl(data.decode()))
+        x = dict(parse_qsl(data.decode()))
+        print(x)
+        return x
 
     def validate_login(self, form: dict):
         try:
@@ -118,18 +120,20 @@ class Handler(SimpleHTTPRequestHandler):
         return path + '/' * trailing_slash
 
     def do_POST(self):
+        print(self.path)
         # TODO
-        if self.path == '/login':
+        if self.path == '/login/':
             form = self.get_form()
             try:
                 self.validate_login(form)
             except errors.LoginError as e:
                 # TODO flash error message to user
-                self.send_error(HTTPStatus.BAD_REQUEST)
+                print('asdflashkdfjkl')
+                self.send_response(HTTPStatus.OK)
             else:
-                self.success_login()
                 self.send_response(HTTPStatus.MOVED_PERMANENTLY)
-                self.send_header('Location', 'index.html')
+                self.success_login()
+                self.send_header('Location', '/index.html')
                 self.end_headers()
                 # TODO
         elif self.path == '/register':

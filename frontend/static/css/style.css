@@ -69,6 +69,31 @@ header nav ul li a:hover
 }
 
 
+#switchMode
+{
+    position: fixed;
+    left: 1%;
+    bottom: 1.5%;
+    padding: 10px 0;
+    height: 52px;
+    width: 52px;
+    color: #BABABA;
+    font-size: 9pt;
+    text-align: center;
+    background-color: #000;
+    border-radius: 60px;
+    box-shadow: 0px 0px 6px rgba(0,0,0,0.6);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 200ms;
+}
+
+#switchMode:hover
+{
+    transform: scale(1.12);
+}
+
+
 footer
 {
     position: fixed;
@@ -92,6 +117,8 @@ footer span.contrast
     color: #69F7A8;
     border-radius: 6px;
 }
+
+
 
 
 
@@ -136,13 +163,16 @@ a.button
     text-align: center;
     text-decoration: none;
     background-color: #FFF;
+    border: 3px solid #FFF;
     box-shadow: 0px 0px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
     transition: all 200ms;
 }
 
 a.button.gray
 {
     background-color: #EFEFEF;
+    border: 3px solid #EFEFEF;
 }
 
 a.button:hover
@@ -188,9 +218,8 @@ a.button:hover
 
 input
 {
-    display: block;
-    margin: 24px 0;
-    padding: 10px 14px;
+    margin: 16px 0;
+    padding: 8px 14px;
     width: 360px;
     font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
     box-sizing: border-box;
@@ -199,7 +228,7 @@ input
 input:not([type=submit])
 {
     color: #4CB4FA;
-    font-size: 18pt;
+    font-size: 16pt;
     background-color: #F2F2F2;
     border: 0;
     border-left: 8px solid #4CB4FA;
@@ -207,6 +236,7 @@ input:not([type=submit])
 
 input[type=submit]
 {
+    display: block;
     color: #FFF;
     font-size: 16pt;
     background-color: #4CB4FA;
@@ -219,7 +249,23 @@ input[type=submit]:hover
     background-color: #269EEF;
 }
 
-form span
+input[type=submit]:disabled
+{
+    background-color: #BABABA !important;
+}
+
+form span.alert
+{
+    display: none;
+    margin-left: 8px;
+    padding: 10px;
+    color: #f05454;
+    font-size: 10pt;
+    background-color: #F4F4F4;
+    border-radius: 3px;
+}
+
+form span.authAlt
 {
     display: block;
     margin-top: 52px;
@@ -232,6 +278,25 @@ form span a
 {
     font-weight: 500;
     color: #4CB4FA;
+}
+
+
+#loginErrorMessage
+{
+    display: none;
+    position: fixed;
+    top: -1%;
+    left: calc(50% - 160px);
+    padding: 18px;
+    width: 320px;
+    color: #FFF;
+    font-size: 12pt;
+    font-weight: 500;
+    background-color: #ff6b6b;
+    border-radius: 6px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    opacity: 0;
 }
 
 
@@ -259,15 +324,59 @@ form span a
     margin-top: 4px;
 }
 
+
+.message .messageBody
+{
+    position: relative;
+    top: -2px;
+}
+
+.message.me .messageBody
+{
+    width: calc(100% - 74px);
+    text-align: right;
+}
+
+.message .messageBody .messageContent
+{
+    display: inline-block;
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+
+.message:not(.me) .messageBody .messageContent
+{
+    color: #FFF;
+    background-color: #2965B5;
+}
+
+.message.me .messageBody .messageContent
+{
+    color: #000;
+    background-color: #EFEFEF;
+}
+
 .message img.avatar
 {
-    margin-right: 10px;
+    margin: 0 12px;
     height: 32px;
     width: 32px;
     border: 1px solid #BABABA;
     border-radius: 32px;
     vertical-align: text-top;
 }
+
+
+.message.me img.avatar1
+{
+    display: none;
+}
+
+.message:not(.me) img.avatar2
+{
+    display: none;
+}
+
 
 .message.sameUserAsInPreviousMessage img.avatar
 {
