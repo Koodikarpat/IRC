@@ -14,6 +14,18 @@ $(document).ready(function() {
 		$(".hidePopup").animate({top: "2%"}, 200);
 	});
 	
+	$("#revealSignupFromLogin").click(function() {
+		$("#signupPopup").show();
+		$("#signupPopup").animate({top: "0%"}, 200);
+		$("#loginPopup").animate({top: "100%"}, 200);
+	});
+	
+	$("#revealLoginFromSignup").click(function() {
+		$("#loginPopup").show();
+		$("#loginPopup").animate({top: "0%"}, 200);
+		$("#signupPopup").animate({top: "100%"}, 200);
+	});
+	
 	
 	$(document).keyup(function(e) {
 		if(e.keyCode==27) {

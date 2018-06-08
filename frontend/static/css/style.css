@@ -5,7 +5,7 @@ body
     width: 100%;
 	color: #FFF;
     font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
-	background: linear-gradient(135deg, #46B1FF, #63ff9f);
+	background: linear-gradient(140deg, #46B1FF, #63ff9f);
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -197,7 +197,7 @@ a.button:hover
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    background-image: linear-gradient(135deg, #46B1FF, #63ff9f);
+    background-image: linear-gradient(140deg, #46B1FF, #63ff9f);
     font-size: 36pt;
     text-shadow: none;
 }
@@ -239,7 +239,7 @@ input[type=submit]
 	width: 240px;
     color: #FFF;
     font-size: 16pt;
-	background: linear-gradient(135deg, #46B1FF, #57CFD9);
+	background: linear-gradient(140deg, #46B1FF, #57CFD9);
     border: 0 !important;
 	border-radius: 6px;
     transition: all 200ms;
@@ -312,7 +312,7 @@ form span a
 	position: fixed;
 	top: 0;
 	left: 11%;
-    height: calc(100vh - 152px);
+    height: calc(100vh - 154px);
 	width: 78%;
 	box-sizing: border-box;
 	overflow-x: hidden;
@@ -406,6 +406,15 @@ form span a
     font-weight: 600;
 }
 
+.message span.timestamp
+{
+    display: inline-block;
+    margin-bottom: 4px;
+    color: #EBEBEB;
+    font-size: 8pt;
+    font-weight: 500;
+}
+
 .message span.messageContent
 {
     color: #252525;
@@ -424,10 +433,40 @@ form span a
 {
     position: fixed;
     left: calc(11% + 58px);
-    bottom: 32px;
+    bottom: 33px;
     height: 90px;
     width: calc(78% - 116px);
     box-sizing: border-box;
+}
+
+#newMessage span.loggedInAs
+{
+	display: block;
+	position: relative;
+	top: 98px;
+	left: 10px;
+	height: 36px;
+	width: 50%;
+	color: #777;
+	font-size: 10pt;
+	text-align: left;
+}
+
+#newMessage span.leaveChat
+{
+	display: block;
+	position: relative;
+	top: 62px;
+	left: calc(50% - 10px);
+	width: 50%;
+	color: #14A0FF;
+	font-size: 10pt;
+	text-align: right;
+}
+
+#newMessage span.loggedInAs b
+{
+	font-weight: 600;
 }
 
 #newMessage textarea
@@ -457,7 +496,7 @@ form span a
 	height: 56px;
     width: 56px;
 	text-align: center;
-	background: linear-gradient(135deg, #46B1FF, #62E6BD);
+	background: linear-gradient(140deg, #46B1FF, #62E6BD);
     border: 0;
 	border-radius: 72px;
 	box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
