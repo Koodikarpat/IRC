@@ -6,7 +6,7 @@ from http import HTTPStatus
 from http.cookies import SimpleCookie
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from time import time
-from urllib.parse import parse_qsl, unquote
+from urllib.parse import unquote
 from uuid import uuid4
 
 from passlib.context import CryptContext
@@ -21,11 +21,6 @@ context = CryptContext(
 
 
 class Handler(SimpleHTTPRequestHandler):
-    """
-    Makes it able to give the handler a directory to serve from.
-
-    Directory code mostly Python 3.7 code backported.
-    """
     sessions = {}
 
     def __init__(self, *args, directory: str = None, **kwargs):
@@ -54,24 +49,24 @@ class Handler(SimpleHTTPRequestHandler):
     @property
     def is_logged_in(self) -> bool:
         session_id = self.cookie.get('session_id')
+
         if session_id is None:
             return False
         elif time() - self.sessions[session_id] > 3600:
             return False
+
         self.sessions[session_id] = time()
         return True
 
     def get_form(self) -> dict:
+        # TODO validation
         size = self.headers.get('Content-Length')
 
-        if size is None:
-            raise ValueError('???')
-
         data = self.rfile.read(int(size))
-        print(data)
         return json.loads(data)
 
-    def validate_login(self, form: dict):
+    @staticmethod
+    def verify_credentials(form: dict):
         try:
             user = User.objects.get(username=form['username'])
         except User.DoesNotExist:
@@ -80,9 +75,10 @@ class Handler(SimpleHTTPRequestHandler):
         if not context.verify(form['password'], user.password):
             raise errors.LoginError('Invalid password.')
 
-    def signup(self, form: dict):
+    @staticmethod
+    def signup(form: dict):
         try:
-            user = User.objects.get(username=form['username'])
+            User.objects.get(username=form['username'])
         except User.DoesNotExist:
             pass
         else:
@@ -120,30 +116,26 @@ class Handler(SimpleHTTPRequestHandler):
         return path + '/' * trailing_slash
 
     def do_POST(self):
-        print(self.path)
-        # TODO
-        if self.path == '/login/':
+        if self.path in ('/login', '/login/'):
             form = self.get_form()
-            print(form)
+
             try:
-                self.validate_login(form)
+                self.verify_credentials(form)
             except errors.LoginError as e:
-                # TODO flash error message to user
-                self.send_response(HTTPStatus.OK)
+                self.send_response(HTTPStatus.OK, str(e))
                 self.end_headers()
             else:
                 self.send_response(HTTPStatus.MOVED_PERMANENTLY)
                 self.success_login()
                 self.send_header('Location', '/index.html')
                 self.end_headers()
-                # TODO
-        elif self.path == '/register':
+        elif self.path in ('/register', '/register/'):
             form = self.get_form()
+
             try:
                 self.signup(form)
             except errors.SignupError as e:
-                print(str(e))
-                self.send_error(HTTPStatus.BAD_REQUEST)
+                self.send_error(HTTPStatus.OK, str(e))
         else:
             self.send_error(HTTPStatus.BAD_REQUEST)
 

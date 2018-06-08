@@ -140,32 +140,29 @@ $(document).ready(function() {
     
     
 	$("#login").on('submit', function(e) {
+	    // Makes the browser not change pages(?)
 		e.preventDefault();
-		
-		var form_login = document.getElementById("login");
-		var xhr_login = new XMLHttpRequest();
 
-        xhr_login.open('POST', "/login/", true);
-        
-        var formData_login = new FormData(form_login);
+		var req = new XMLHttpRequest();
+        req.open("POST", "/login/");
 
-        xhr_login.setRequestHeader("Content-length", formData_login.length);
-        xhr_login.setRequestHeader("Connection", "close");
+		var form_data = $("#login").serializeArray();
+		var json_data = {};
 
-		var object_login = {};
-		formData_login.forEach(function(value, key) {
-			object_login[key] = value;
+		$.each(form_data, function() {
+            json_data[this.name] = this.value;
 		});
-		var json_login = JSON.stringify(object_login);
+		var json = JSON.stringify(json_data);
 
-		console.log(json_login);
-        xhr_login.send(json_login);
+        req.send(json);
 
-        xhr_login.onreadystatechange = function() {
-        console.log(this);
-            if(this.status == 200) {
-                console.log("a");
-                // überfancy
+        req.onreadystatechange = function() {
+            //   4 = complete
+            // 200 = Request OK, values bad
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this);
+                // Show user what values were bad.
+                loginErrorMessage(this.statusText);
             }
         }
 	});
@@ -204,61 +201,6 @@ $(document).ready(function() {
             }
         }
 	});
-    
-// $("#login_submit").click(function() {
-//	login();
-//	});
-	
-	
-	/*
-	
-	jaa joo vanha login juttu
-	
-		var form_login = document.getElementById("login");
-		var xhr_login = new XMLHttpRequest();
-
-        xhr_login.open('POST', "/login/", true);
-        
-        var formData_login = new FormData(form_login);
-        formData_login.append('login_submit', true);
-
-        http.setRequestHeader("Content-length", formData_login.length);
-        http.setRequestHeader("Connection", "close");
-        
-        xhr_login.send(formData_login);
-
-        xhr_login.addEventListener("readystatechange", processRequest, false);
-
-        function processRequest(e) {
-            if(xhr_login.readyState == 4 && xhr_login.status == 200) {
-                // überfancy
-            }
-        }
-		
-		*/
-    
-    
-    
-    /* var xhr_signup = new XMLHttpRequest();
-    
-    xhr_signup.open('POST', "/register/", true);
-    xhr_signup.send();
-    
-    xhr_signup.addEventListener("readystatechange", processRequest, false)
-    
-    function processRequest(e) {
-        if(xhr_signup.readyState == 4 && xhr_signup.status == 200) {
-            // überfancy
-        }
-    }
-    
-    */
-    
-    
-    // login messages
-    
-    
-
 });
 
 function loginErrorMessage(message) {
