@@ -229,6 +229,12 @@ $(document).ready(function() {
 	
 	
 	
+	// Chat
+	
+	if($("#messages").length > 0) {
+		$("#messages").scrollTop($("#messages")[0].scrollHeight);
+	}
+	
 	// Postmessage form
 	
 	$("#postmessage textarea").keyup(function() {
@@ -246,6 +252,6 @@ $(document).ready(function() {
 function loginErrorMessage(message) {
 	$("#loginErrorMessage").html(message);
 	$("#loginErrorMessage").show();
-	$("#loginErrorMessage").animate({top: "3%", opacity: "1"}, 200);
-	$("#loginErrorMessage").delay(5000).animate({top: "-1%", opacity: "0"}, 200);
+	$("#loginErrorMessage").animate({top: "4%", opacity: "1"}, 200);
+	$("#loginErrorMessage").delay(5000).animate({top: "-4%", opacity: "0"}, 200);
 }

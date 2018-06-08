@@ -29,7 +29,6 @@ a.button:hover
 {
     color: #666;
     background-color: #FFF;
-    box-shadow: 0px 0px 6px rgba(255,255,255,0.6);
 }
 
 
@@ -41,11 +40,7 @@ a.button:hover
 
 input:not([type=submit])
 {
-    background-color: #101010;
-}
-
-input:not([type=submit])
-{
+	color: #7FCBFF;
     background-color: #101010;
 }
 
@@ -90,4 +85,9 @@ textarea
 {
     color: #FFF;
     background-color: #404040;
+}
+
+#newMessage textarea
+{
+	background-color: rgba(255,255,255,0.35);
 }

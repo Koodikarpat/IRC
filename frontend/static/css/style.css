@@ -72,17 +72,16 @@ header nav ul li a:hover
 #switchMode
 {
     position: fixed;
-    left: 1%;
-    bottom: 1.5%;
-    padding: 10px 0;
-    height: 52px;
-    width: 52px;
+    left: 2vh;
+    bottom: 2vh;
+    padding: 12px 0;
+    height: 54px;
+    width: 54px;
     color: #BABABA;
     font-size: 9pt;
     text-align: center;
     background-color: #000;
-    border-radius: 60px;
-    box-shadow: 0px 0px 6px rgba(0,0,0,0.6);
+    border-radius: 54px;
     box-sizing: border-box;
     cursor: pointer;
     transition: all 200ms;
@@ -97,10 +96,9 @@ header nav ul li a:hover
 footer
 {
     position: fixed;
-    left: 0;
+    right: 0;
     bottom: 0;
-    margin: 1%;
-    width: 98%;
+    margin: 2vh;
     text-align: right;
 }
 
@@ -135,7 +133,6 @@ h1
 {
     font-size: 48pt;
     font-weight: 700;
-    text-shadow: 0px 0px 4px rgba(0,0,0,0.2);
 }
 
 #authenticateBody h1
@@ -148,13 +145,13 @@ h1
     margin-bottom: 72px;
     font-size: 16pt;
     font-weight: 400;
-    text-shadow: 0px 0px 4px rgba(0,0,0,0.2);
 }
 
 a.button
 {
     display: inline-block;
-    margin-right: 32px;
+    margin-right: 36px;
+	margin-bottom: 24px;
     padding: 16px 12px;
     width: 230px;
     color: #4CB4FA;
@@ -164,7 +161,7 @@ a.button
     text-decoration: none;
     background-color: #FFF;
     border: 3px solid #FFF;
-    box-shadow: 0px 0px 6px rgba(0,0,0,0.2);
+	border-radius: 6px;
     cursor: pointer;
     transition: all 200ms;
 }
@@ -218,7 +215,7 @@ a.button:hover
 
 input
 {
-    margin: 16px 0;
+    margin: 12px 0;
     padding: 8px 14px;
     width: 360px;
     font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
@@ -227,42 +224,49 @@ input
 
 input:not([type=submit])
 {
-    color: #4CB4FA;
+    color: #14A0FF;
     font-size: 16pt;
     background-color: #F2F2F2;
     border: 0;
-    border-left: 8px solid #4CB4FA;
+    border-left: 6px solid #46B1FF;
+	border-radius: 6px;
 }
 
 input[type=submit]
 {
     display: block;
+	margin: 12px 60px;
+	width: 240px;
     color: #FFF;
     font-size: 16pt;
-    background-color: #4CB4FA;
+	background: linear-gradient(135deg, #46B1FF, #57CFD9);
     border: 0 !important;
+	border-radius: 6px;
     transition: all 200ms;
 }
 
 input[type=submit]:hover
 {
-    background-color: #269EEF;
+	transform: scale(1.05);
 }
 
 input[type=submit]:disabled
 {
-    background-color: #BABABA !important;
+    background: #DDD !important;
+	transform: none !important;
 }
 
 form span.alert
 {
     display: none;
+	position: relative;
+	top: -3px;
     margin-left: 8px;
     padding: 10px;
-    color: #f05454;
+    color: #FF4444;
     font-size: 10pt;
-    background-color: #F4F4F4;
-    border-radius: 3px;
+    background-color: #FFE8E8;
+    border-radius: 4px;
 }
 
 form span.authAlt
@@ -285,16 +289,15 @@ form span a
 {
     display: none;
     position: fixed;
-    top: -1%;
+    top: -4%;
     left: calc(50% - 160px);
     padding: 18px;
     width: 320px;
     color: #FFF;
     font-size: 12pt;
     font-weight: 500;
-    background-color: #ff6b6b;
-    border-radius: 6px;
-    box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+    background-color: #FF5C5C;
+	border-radius: 6px;
     box-sizing: border-box;
     opacity: 0;
 }
@@ -357,7 +360,7 @@ form span a
 .message:not(.me) .messageBody .messageContent
 {
     color: #FFF;
-    background-color: #2965B5;
+    background-color: #2171DD;
 }
 
 .message.me .messageBody .messageContent
