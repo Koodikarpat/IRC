@@ -157,12 +157,11 @@ $(document).ready(function() {
         req.send(json);
 
         req.onreadystatechange = function() {
-            //   4 = complete
-            // 200 = Request OK, values bad
-            if (this.readyState == 4 && this.status == 200) {
-                console.log(this);
+            if (this.readyState == 4 && this.status == 400) {
                 // Show user what values were bad.
                 loginErrorMessage(this.statusText);
+            } else if (this.readyState == 4 && this.status == 200) {
+                $(location).attr('href', this.responseURL)
             }
         }
 	});

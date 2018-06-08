@@ -122,7 +122,7 @@ class Handler(SimpleHTTPRequestHandler):
             try:
                 self.verify_credentials(form)
             except errors.LoginError as e:
-                self.send_response(HTTPStatus.OK, str(e))
+                self.send_response(HTTPStatus.BAD_REQUEST, str(e))
                 self.end_headers()
             else:
                 self.send_response(HTTPStatus.MOVED_PERMANENTLY)
