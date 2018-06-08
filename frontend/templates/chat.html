@@ -11,18 +11,7 @@
         <script src="/static/js/mode.js"></script>
         <title>Chat</title>
     </head>
-    
-    <header>
-        <a href="/"><img src="/static/img/logo.png"></a>
-        <nav>
-            <ul>
-                <li><a href="/">Etusivu</a></li>
-                <li><a href="/chat/">Chatti</a></li>
-                <li><a href="/logout/">Kirjaudu ulos</a></li>
-            </ul>
-        </nav>
-    </header>
-    
+	
     <body>
         
         <div id="chatBody">
@@ -114,10 +103,13 @@
                     <img src="/static/img/markku123.jpg" class="avatar avatar2">
                 </div>
             </div>
+			
+			<div id="chatFade"></div>
+			
             <div id="newMessage">
                 <form id="postmessage" method="post">
                     <textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
-                    <input type="submit" value="Lähetä">
+                    <div id="submitBackground"><input type="submit" value=""></div>
                 </form>
             </div>
         </div>
