@@ -135,8 +135,33 @@ $(document).ready(function() {
     });
     
     
-    
-    // http requests n stuff
+
+
+    $("#signup").on("submit", function(e) {
+        e.preventDefault();
+
+		var req = new XMLHttpRequest();
+        req.open("POST", "/register/");
+
+		var form_data = $("#signup").serializeArray();
+		var json_data = {};
+
+		$.each(form_data, function() {
+            json_data[this.name] = this.value;
+		});
+		var json = JSON.stringify(json_data);
+
+        req.send(json);
+
+        req.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 400) {
+                // Show user what values were bad.
+                loginErrorMessage(this.statusText);
+            } else if (this.readyState == 4 && this.status == 200) {
+                $(location).attr('href', this.responseURL)
+            }
+        }
+    });
     
     
 	$("#login").on('submit', function(e) {

@@ -135,7 +135,12 @@ class Handler(SimpleHTTPRequestHandler):
             try:
                 self.signup(form)
             except errors.SignupError as e:
-                self.send_error(HTTPStatus.OK, str(e))
+                self.send_error(HTTPStatus.BAD_REQUEST, str(e))
+            else:
+                self.send_response(HTTPStatus.MOVED_PERMANENTLY)
+                self.success_login()
+                self.send_header('Location', '/authenticate.html')
+                self.end_headers()
         else:
             self.send_error(HTTPStatus.BAD_REQUEST)
 
