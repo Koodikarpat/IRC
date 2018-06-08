@@ -22,6 +22,9 @@ context = CryptContext(
 
 class Handler(SimpleHTTPRequestHandler):
     sessions = {}
+    requires_login = [
+        '/chat.html'
+    ]
 
     def __init__(self, *args, directory: str = None, **kwargs):
         if directory is None:
@@ -35,11 +38,11 @@ class Handler(SimpleHTTPRequestHandler):
     @property
     def cookie(self) -> SimpleCookie:
         if self._cookie is None:
-            self._cookie = SimpleCookie(self.headers.get('Cookies', ''))
+            self._cookie = SimpleCookie(self.headers.get('Cookie', ''))
         return self._cookie
 
     def success_login(self):
-        session_id, now = uuid4(), time()
+        session_id, now = str(uuid4()), time()
         self.sessions[session_id] = now
         self.cookie['session_id'] = session_id
         self.cookie['session_id']['max-age'] = 3600
@@ -51,11 +54,16 @@ class Handler(SimpleHTTPRequestHandler):
         session_id = self.cookie.get('session_id')
 
         if session_id is None:
+            print('asfhkl')
             return False
-        elif time() - self.sessions[session_id] > 3600:
-            return False
+        try:
+            if time() - self.sessions[session_id.value] > 3600:
+                return False
+        except KeyError as e:
+            print(str(e))
+            return True
 
-        self.sessions[session_id] = time()
+        self.sessions[session_id.value] = time()
         return True
 
     def get_form(self) -> dict:
@@ -125,10 +133,10 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(HTTPStatus.BAD_REQUEST, str(e))
                 self.end_headers()
             else:
-                self.send_response(HTTPStatus.MOVED_PERMANENTLY)
+                self.send_response(HTTPStatus.OK, '/chat.html')
                 self.success_login()
-                self.send_header('Location', '/index.html')
                 self.end_headers()
+                self.wfile.write(b'<b>haklsdfh</b>')
         elif self.path in ('/register', '/register/'):
             form = self.get_form()
 
@@ -137,12 +145,32 @@ class Handler(SimpleHTTPRequestHandler):
             except errors.SignupError as e:
                 self.send_error(HTTPStatus.BAD_REQUEST, str(e))
             else:
-                self.send_response(HTTPStatus.MOVED_PERMANENTLY)
-                self.success_login()
-                self.send_header('Location', '/authenticate.html')
+                self.send_response(HTTPStatus.OK, '/authorization.html')
                 self.end_headers()
         else:
             self.send_error(HTTPStatus.BAD_REQUEST)
+
+    def do_GET(self):
+        print(self.is_logged_in)
+        print(self.path)
+        if self.path == '/asd':
+            self.send_response(200)
+            self.success_login()
+            self.end_headers()
+            self.wfile.write(b'<b>haklsdfh</b>')
+            return
+        if self.path == '/authenticate.html' and self.is_logged_in:
+            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.send_header('Location', '/chat.html')
+            self.end_headers()
+
+        if self.path in self.requires_login and not self.is_logged_in:
+            print('ooo')
+            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.send_header('Location', '/authenticate.html')
+            self.end_headers()
+        else:
+            super().do_GET()
 
 
 class ThreadedServer(socketserver.ThreadingMixIn, HTTPServer):

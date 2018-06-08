@@ -143,6 +143,9 @@ $(document).ready(function() {
 		var req = new XMLHttpRequest();
         req.open("POST", "/register/");
 
+        console.log(document.cookie);
+        req.setRequestHeader('Cookies', document.cookie);
+
 		var form_data = $("#signup").serializeArray();
 		var json_data = {};
 
@@ -158,7 +161,7 @@ $(document).ready(function() {
                 // Show user what values were bad.
                 loginErrorMessage(this.statusText);
             } else if (this.readyState == 4 && this.status == 200) {
-                $(location).attr('href', this.responseURL)
+                $(location).attr('href', this.statusText)
             }
         }
     });
@@ -182,11 +185,14 @@ $(document).ready(function() {
         req.send(json);
 
         req.onreadystatechange = function() {
+            console.log(this);
             if (this.readyState == 4 && this.status == 400) {
                 // Show user what values were bad.
                 loginErrorMessage(this.statusText);
             } else if (this.readyState == 4 && this.status == 200) {
-                $(location).attr('href', this.responseURL)
+                console.log("ashcans");
+                console.log(this.getAllResponseHeaders());
+                // $(location).attr('href', this.statusText);
             }
         }
 	});
