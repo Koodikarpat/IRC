@@ -1,125 +1,128 @@
 <!DOCTYPE HTML>
 
 <html>
-    
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="/static/css/style.css" rel="stylesheet">
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="/static/js/script.js"></script>
-        <script src="/static/js/mode.js"></script>
-        <title>Chat</title>
-    </head>
 	
-    <body>
-        
-        <div id="chatBody">
-            <div id="messages">
-                <div class="message me">
-                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">aliylikoski</span> <span class="timestamp">11.36</span><br>
-                        <span class="messageContent">Tämä on testiviesti :DDD</span>
-                    </div>
-                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">jokuvaan</span> <span class="timestamp">11.37</span><br>
-                        <span class="messageContent">Hei Ali :)</span>
-                    </div>
-                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/pekka1000.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">pekka1000</span><span class="timestamp">11.40</span><br>
-                        <span class="messageContent">Moikka</span>
-                    </div>
-                    <img src="/static/img/pekka1000.jpg" class="avatar avatar2">
-                </div>
-                <div class="message me">
-                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">aliylikoski</span> <span class="timestamp">11.43</span><br>
-                        <span class="messageContent">Miten menee?</span>
-                    </div>
-                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
-                </div>
-                <div class="message me sameUserAsInPreviousMessage">
-                    <img src="/static/img/avatar.jpg" class="avatar avatar1" style="height:0px;">
-                    <div class="messageBody">
-                        <span class="messageContent">Tästä tulee vielä hyvä chatti</span>
-                    </div>
-                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">markku123</span> <span class="timestamp">11.44</span><br>
-                        <span class="messageContent">:D</span>
-                    </div>
-                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
-                </div>
-                <div class="message me">
-                    <img src="/static/img/avatar.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">aliylikoski</span> <span class="timestamp">11.44</span><br>
-                        <span class="messageContent">:D</span>
-                    </div>
-                    <img src="/static/img/avatar.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/pekka1000.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">pekka1000</span> <span class="timestamp">11.45</span><br>
-                        <span class="messageContent">:D</span>
-                    </div>
-                    <img src="/static/img/pekka1000.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">jokuvaan</span> <span class="timestamp">11.47</span><br>
-                        <span class="messageContent">:D</span>
-                    </div>
-                    <img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
-                </div>
-                <div class="message">
-                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="username">markku123</span> <span class="timestamp">11.47</span><br>
-                        <span class="messageContent">:D</span>
-                    </div>
-                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
-                </div>
-                <div class="message sameUserAsInPreviousMessage">
-                    <img src="/static/img/markku123.jpg" class="avatar avatar1">
-                    <div class="messageBody">
-                        <span class="messageContent">Pitää mennä heippa</span>
-                    </div>
-                    <img src="/static/img/markku123.jpg" class="avatar avatar2">
-                </div>
-            </div>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="/static/css/style.css" rel="stylesheet">
+		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="/static/js/script.js"></script>
+		<script src="/static/js/mode.js"></script>
+		<title>Chat</title>
+	</head>
+	
+	<body>
+		
+		<div id="chatBody">
+			<div id="messages">
+				<div class="message me">
+					<img src="/static/img/avatar.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.36</span></div>
+						<span class="messageContent">Tämä on testiviesti :DDD</span>
+					</div>
+					<img src="/static/img/avatar.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">jokuvaan</span> <span class="timestamp">11.37</span></div>
+						<span class="messageContent">Hei Ali :)</span>
+					</div>
+					<img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/pekka1000.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">pekka1000</span> <span class="timestamp">11.40</span></div>
+						<span class="messageContent">Moikka</span>
+					</div>
+					<img src="/static/img/pekka1000.jpg" class="avatar avatar2">
+				</div>
+				<div class="message me">
+					<img src="/static/img/avatar.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.43</span></div>
+						<span class="messageContent">Miten menee?</span>
+					</div>
+					<img src="/static/img/avatar.jpg" class="avatar avatar2">
+				</div>
+				<div class="message me sameUserAsInPreviousMessage">
+					<img src="/static/img/avatar.jpg" class="avatar avatar1" style="height:0px;">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.43</span></div>
+						<span class="messageContent">Tästä tulee vielä hyvä chatti</span>
+					</div>
+					<img src="/static/img/avatar.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/markku123.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.44</span></div>
+						<span class="messageContent">:D</span>
+					</div>
+					<img src="/static/img/markku123.jpg" class="avatar avatar2">
+				</div>
+				<div class="message me">
+					<img src="/static/img/avatar.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.44</span></div>
+						<span class="messageContent">:D</span>
+					</div>
+					<img src="/static/img/avatar.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/pekka1000.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">pekka1000</span> <span class="timestamp">11.45</span></div>
+						<span class="messageContent">:D</span>
+					</div>
+					<img src="/static/img/pekka1000.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">jokuvaan</span> <span class="timestamp">11.47</span></div>
+						<span class="messageContent">:D</span>
+					</div>
+					<img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
+				</div>
+				<div class="message">
+					<img src="/static/img/markku123.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.47</span></div>
+						<span class="messageContent">:D</span>
+					</div>
+					<img src="/static/img/markku123.jpg" class="avatar avatar2">
+				</div>
+				<div class="message sameUserAsInPreviousMessage">
+					<img src="/static/img/markku123.jpg" class="avatar avatar1">
+					<div class="messageBody">
+						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.49</span></div>
+						<span class="messageContent">Pitää mennä heippa</span>
+					</div>
+					<img src="/static/img/markku123.jpg" class="avatar avatar2">
+				</div>
+			</div>
 			
 			<div id="chatFade"></div>
 			
-            <div id="newMessage">
+			<div id="newMessage">
 				<span class="loggedInAs">Sisäänkirjautuneena käyttäjällä <b>aliylikoski</b></span>
 				<span class="leaveChat">Kirjaudu ulos</span>
-                <form id="postmessage" method="post">
-                    <textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
-                    <div id="submitBackground"><input type="submit" value=""></div>
-                </form>
-            </div>
-        </div>
-        
-        <footer>
-            <span id="switchMode"></span>
-        </footer>
-        
-    </body>
-    
+				<form id="postmessage" method="post">
+					<textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
+					<div id="submitBackground"><input type="submit" value=""></div>
+				</form>
+			</div>
+			<div id="fancyAlert"></div>
+		</div>
+		
+		<footer>
+			<span id="switchMode"></span>
+		</footer>
+		
+	</body>
+	
 </html>

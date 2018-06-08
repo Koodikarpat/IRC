@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700');
+
 body
 {
     padding: 7% 12%;
     height: 100vh;
     width: 100%;
 	color: #FFF;
-    font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
+    font-family: "Source Sans Pro", "Arial", "Helvetica", sans-serif;
 	background: linear-gradient(140deg, #46B1FF, #63ff9f);
     box-sizing: border-box;
     overflow: hidden;
@@ -154,7 +156,7 @@ a.button
 	margin-bottom: 24px;
     padding: 16px 12px;
     width: 230px;
-    color: #4CB4FA;
+    color: #55CADF;
     font-size: 16pt;
     font-weight: 500;
     text-align: center;
@@ -168,6 +170,7 @@ a.button
 
 a.button.gray
 {
+	color: #5AD3D3;
     background-color: #EFEFEF;
     border: 3px solid #EFEFEF;
 }
@@ -210,6 +213,12 @@ a.button:hover
     color: #9A9A9A;
     font-size: 48pt;
     font-weight: 300;
+	cursor: pointer;
+}
+
+.hidePopup:hover
+{
+	color: #666;
 }
 
 
@@ -218,7 +227,7 @@ input
     margin: 12px 0;
     padding: 8px 14px;
     width: 360px;
-    font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
+    font-family: "Source Sans Pro", "Arial", "Helvetica", sans-serif;
     box-sizing: border-box;
 }
 
@@ -285,7 +294,7 @@ form span a
 }
 
 
-#loginErrorMessage
+#loginErrorMessage, #fancyAlert
 {
     display: none;
     position: fixed;
@@ -397,6 +406,12 @@ form span a
     opacity: 0;
 }
 
+.message.sameUserAsInPreviousMessage div.messageData
+{
+    display: none;
+}
+
+
 .message span.username
 {
     display: inline-block;
@@ -476,7 +491,7 @@ form span a
     padding: 18px;
     height: 90px;
     width: calc(78% - 116px);
-    font-family: "Avenir Next", "Arial", "Helvetica", sans-serif;
+    font-family: "Source Sans Pro", "Arial", "Helvetica", sans-serif;
     font-size: 12pt;
 	line-height: 150%;
 	background-color: rgba(255,255,255,0.6);

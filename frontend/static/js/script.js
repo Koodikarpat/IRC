@@ -210,9 +210,8 @@ $(document).ready(function() {
 	});
 	
 	
-	$("#postmessage").on('submit', function(e) {
-		e.preventDefault();
-		
+	
+	function sendMessage() {
 		var form_postmessage = document.getElementById("postmessage");
 		var xhr_postmessage = new XMLHttpRequest();
 		
@@ -223,7 +222,24 @@ $(document).ready(function() {
 		xhr_postmessage.setRequestHeader("Content-length", formData_postmessage.length);
 		xhr_postmessage.setRequestHeader("Connection", "close");
 		
-		var object_postmessage = {};
+
+		var username = "aliylikoski";
+		
+		function checkTime(i) {
+			if (i < 10) {
+				i = "0" + i;
+			}
+			return i;
+		}
+		
+		var currentTimestamp = new Date();
+		var currentH = currentTimestamp.getHours()
+		var currentM = currentTimestamp.getMinutes()
+		currentH = checkTime(currentH);
+		currentM = checkTime(currentM);
+		
+		
+		var object_postmessage = {username: username, timestamp: currentH + ":" + currentM};
 		formData_postmessage.forEach(function(value, key) {
 			object_postmessage[key] = value;
 		});
@@ -234,8 +250,34 @@ $(document).ready(function() {
 		
 		xhr_postmessage.onreadystatechange = function() {
 			if(this.readyState == 4) {
-				console.log("UBER FANCY");
+				console.log("UBER LIT™");
+				
+				/*
+				if(document.getElementById('messages').lastChild.classList.contains('me') == true) {
+					previousMessageIsOwn = "sameUserAsInPreviousMessage"
+				} else {
+					previousMessageIsOwn = "";
+				}
+				*/
+				
+				
+				previousMessageIsOwn = "";
+				
+				
+				document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message me ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + object_postmessage['username'] + '</span> <span class="timestamp">' + object_postmessage['timestamp'] + '</span></div><span class="messageContent">' + object_postmessage['message'] + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+				$("#messages").scrollTop($("#messages")[0].scrollHeight);
+				$("#postmessage textarea").val('');
 			}
+		}
+	}
+	
+	
+	$("#postmessage").on('submit', function(e) {
+		e.preventDefault();
+		if($("#postmessage textarea").val().length > 0) {
+			sendMessage();
+		} else {
+			fancyAlert("Et voi lähettää tyhjää viestiä!");
 		}
 	});
 	
@@ -246,6 +288,16 @@ $(document).ready(function() {
 	if($("#messages").length > 0) {
 		$("#messages").scrollTop($("#messages")[0].scrollHeight);
 	}
+	
+	
+	// Delete message
+	$(".message.me .messageContent").dblclick(function() {
+		var deleteMessageConfirmation = confirm("Oletko varma, että haluat poistaa tämän viestin?");
+		if(deleteMessageConfirmation) {
+			alert("Poistit viestin!");
+		}
+	});
+	
 	
 	// Postmessage form
 	
@@ -266,4 +318,19 @@ function loginErrorMessage(message) {
 	$("#loginErrorMessage").show();
 	$("#loginErrorMessage").animate({top: "4%", opacity: "1"}, 200);
 	$("#loginErrorMessage").delay(5000).animate({top: "-4%", opacity: "0"}, 200);
+}
+
+function fancyAlert(message) {
+	$("#fancyAlert").html(message);
+	$("#fancyAlert").show();
+	$("#fancyAlert").animate({top: "4%", opacity: "1"}, 200);
+	$("#fancyAlert").delay(2000).animate({top: "-4%", opacity: "0"}, 200);
+}
+
+function incomingChatMessage(username, timestamp, message) {
+	previousMessageIsOwn = "";
+	
+	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + username + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+	$("#messages").scrollTop($("#messages")[0].scrollHeight);
+	$("#postmessage textarea").val('');
 }
