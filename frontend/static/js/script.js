@@ -171,9 +171,6 @@ $(document).ready(function() {
 	    // Makes the browser not change pages(?)
 		e.preventDefault();
 
-		var req = new XMLHttpRequest();
-        req.open("POST", "/login/");
-
 		var form_data = $("#login").serializeArray();
 		var json_data = {};
 
@@ -182,19 +179,19 @@ $(document).ready(function() {
 		});
 		var json = JSON.stringify(json_data);
 
-        req.send(json);
+		(async () => {
+		    const response = await fetch('/login', {
+		        method: 'POST',
+		        body: json,
+		        credentials: 'include'  // save cookies
+		    });
 
-        req.onreadystatechange = function() {
-            console.log(this);
-            if (this.readyState == 4 && this.status == 400) {
-                // Show user what values were bad.
-                loginErrorMessage(this.statusText);
-            } else if (this.readyState == 4 && this.status == 200) {
-                console.log("ashcans");
-                console.log(this.getAllResponseHeaders());
-                // $(location).attr('href', this.statusText);
-            }
-        }
+		    if (response.redirected) {
+		        $(location).attr('href', response.url);
+		    } else {
+		        loginErrorMessage(response.statusText);
+		    }
+		})();
 	});
 	
 	$("#postmessage").on('submit', function(e) {

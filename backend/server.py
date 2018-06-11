@@ -2,6 +2,7 @@ import json
 import os
 import posixpath
 import socketserver
+from datetime import datetime
 from http import HTTPStatus
 from http.cookies import SimpleCookie
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -12,7 +13,7 @@ from uuid import uuid4
 from passlib.context import CryptContext
 
 from backend import errors
-from backend.db import User
+from backend.db import Cookie, User
 
 context = CryptContext(
     schemes=["argon2", "bcrypt_sha256", "scrypt"],
@@ -21,7 +22,6 @@ context = CryptContext(
 
 
 class Handler(SimpleHTTPRequestHandler):
-    sessions = {}
     requires_login = [
         '/chat.html'
     ]
@@ -41,10 +41,22 @@ class Handler(SimpleHTTPRequestHandler):
             self._cookie = SimpleCookie(self.headers.get('Cookie', ''))
         return self._cookie
 
-    def success_login(self):
-        session_id, now = str(uuid4()), time()
-        self.sessions[session_id] = now
+    def redirect(self, location, *, code=HTTPStatus.MOVED_PERMANENTLY):
+        self.send_response(code)
+        self.send_header('Location', location)
+
+    def success_login(self, user: User):
+        session_id = str(uuid4())
+        now = time()
+        cookie = Cookie(
+            session_id=session_id,
+            created=datetime.fromtimestamp(now),
+            user=user
+        )
+        cookie.save()
+
         self.cookie['session_id'] = session_id
+        self.cookie['session_id']['path'] = '/'
         self.cookie['session_id']['max-age'] = 3600
         self.cookie['session_id']['expires'] = self.date_time_string(now + 3600)
         self.send_header('Set-Cookie', self.cookie['session_id'].OutputString())
@@ -53,18 +65,17 @@ class Handler(SimpleHTTPRequestHandler):
     def is_logged_in(self) -> bool:
         session_id = self.cookie.get('session_id')
 
+        # No session_id header, not logged in
         if session_id is None:
-            print('asfhkl')
             return False
-        try:
-            if time() - self.sessions[session_id.value] > 3600:
-                return False
-        except KeyError as e:
-            print(str(e))
-            return True
 
-        self.sessions[session_id.value] = time()
-        return True
+        # Session id exists - see if it's saved in DB
+        try:
+            Cookie.objects.get(session_id=session_id.value)
+        except Cookie.DoesNotExist:  # session id has expired somehow or is invalid
+            return False
+        else:
+            return True
 
     def get_form(self) -> dict:
         # TODO validation
@@ -74,7 +85,7 @@ class Handler(SimpleHTTPRequestHandler):
         return json.loads(data)
 
     @staticmethod
-    def verify_credentials(form: dict):
+    def login(form: dict):
         try:
             user = User.objects.get(username=form['username'])
         except User.DoesNotExist:
@@ -82,6 +93,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         if not context.verify(form['password'], user.password):
             raise errors.LoginError('Invalid password.')
+
+        return user
 
     @staticmethod
     def signup(form: dict):
@@ -128,15 +141,14 @@ class Handler(SimpleHTTPRequestHandler):
             form = self.get_form()
 
             try:
-                self.verify_credentials(form)
+                user = self.login(form)
             except errors.LoginError as e:
                 self.send_response(HTTPStatus.BAD_REQUEST, str(e))
                 self.end_headers()
             else:
-                self.send_response(HTTPStatus.OK, '/chat.html')
-                self.success_login()
+                self.redirect('/chat.html')
+                self.success_login(user)
                 self.end_headers()
-                self.wfile.write(b'<b>haklsdfh</b>')
         elif self.path in ('/register', '/register/'):
             form = self.get_form()
 
@@ -145,27 +157,19 @@ class Handler(SimpleHTTPRequestHandler):
             except errors.SignupError as e:
                 self.send_error(HTTPStatus.BAD_REQUEST, str(e))
             else:
+                # TODO
                 self.send_response(HTTPStatus.OK, '/authorization.html')
                 self.end_headers()
         else:
             self.send_error(HTTPStatus.BAD_REQUEST)
 
     def do_GET(self):
-        print(self.is_logged_in)
-        print(self.path)
-        if self.path == '/asd':
-            self.send_response(200)
-            self.success_login()
-            self.end_headers()
-            self.wfile.write(b'<b>haklsdfh</b>')
-            return
         if self.path == '/authenticate.html' and self.is_logged_in:
             self.send_response(HTTPStatus.PERMANENT_REDIRECT)
             self.send_header('Location', '/chat.html')
             self.end_headers()
 
         if self.path in self.requires_login and not self.is_logged_in:
-            print('ooo')
             self.send_response(HTTPStatus.PERMANENT_REDIRECT)
             self.send_header('Location', '/authenticate.html')
             self.end_headers()

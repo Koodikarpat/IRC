@@ -11,7 +11,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', '-p', type=int, default=8000)
     parser.add_argument('--directory', '-d', default='frontend')
-    parser.add_argument('--database', '--db', default='users')
+    parser.add_argument('--database', '--db', default='chatUsers')
 
     return parser.parse_args()
 
@@ -19,7 +19,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    connect(args.database)
+    connect(args.database, host='94.237.26.34')
 
     handler = partial(Handler, directory=args.directory)
     server = ThreadedServer(('localhost', args.port), handler)
