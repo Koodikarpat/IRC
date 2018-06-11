@@ -78,18 +78,19 @@ header nav ul li a:hover
 
 #revealChannelSelection
 {
+	DISPLAY: NONE !IMPORTANT;
     position: fixed;
-    left: 2vh;
+    left: -10px;
     top: 2vh;
-    color: #FFF;
-    background-color: transparent;
-    padding: 11px 0;
+    color: #46B1FF;
+    background-color: #FFF;
+    padding: 14px 0;
+	padding-left: 10px;
     height: 58px;
-    width: 58px;
+    width: 68px;
     font-size: 9pt;
     text-align: center;
-	border: 3px solid #FFF;
-    border-radius: 6px;
+    border-radius: 0 6px 6px 0;
     box-sizing: border-box;
     cursor: pointer;
     transition: all 200ms;
@@ -102,11 +103,13 @@ header nav ul li a:hover
 
 
 
-.switchMode, .logOut.mobile
+.switchMode, .logOut
 {
-    padding: 11px 6px;
+	DISPLAY: NONE !IMPORTANT;
+    padding: 14px 6px;
+	padding-left: 16px;
     height: 58px;
-    width: 58px;
+    width: 68px;
     font-size: 9pt;
     text-align: center;
     border-radius: 6px;
@@ -115,20 +118,30 @@ header nav ul li a:hover
     transition: all 200ms;
 }
 
-.switchMode:hover, #revealChannelSelection:hover, .logOut.mobile:hover
+#revealChannelSelection:hover, .switchMode:hover, .logOut:hover
 {
-    transform: scale(1.12);
+	left: -4px !important;
+    transform: scale(1.05);
 }
 
 #footerSwitchMode
 {
     position: fixed;
-    top: calc(4vh + 58px);
-    left: 2vh;
-    color: #000;
-    background-color: transparent;
-	border: 3px solid #000;
-    border-radius: 6px;
+    top: calc(6vh + 116px);
+    left: -10px;
+    color: #DDD;
+    background-color: #333;
+    border-radius: 0 6px 6px 0;
+}
+
+.logOut
+{
+    position: fixed;
+    top: calc(8vh + 174px);
+    left: -10px;
+    color: #EFEFEF;
+    background-color: #D43030;
+    border-radius: 0 6px 6px 0;
 }
 
 #mobileChatHeader
@@ -359,13 +372,120 @@ form span a
 
 /* Chat page */
 
+#sidebar
+{
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 26px;
+	height: 100vh;
+	width: 18%;
+	background-color: #333;
+	box-sizing: border-box;
+}
+
+#sidebar h3
+{
+	display: inline-block;
+	margin: 12px 0;
+	padding: 10px;
+    color: #333;
+	font-size: 14pt;
+    background: linear-gradient(140deg, #46B1FF, #63ff9f);
+	border-radius: 4px;
+}
+
+#sidebar p.description
+{
+	color: #FFF;
+	font-size: 11pt;
+}
+
+
+.sidebarButton
+{
+	display: block;
+	margin-bottom: 14px;
+	padding: 8px;
+	width: 100%;
+	text-align: center;
+	border-radius: 4px;
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: all 200ms;
+}
+
+.sidebarButton:hover
+{
+	transform: scale(1.05);
+}
+
+#onlineOnChannel
+{
+	color: #FFF;
+	background-color: #3ED133;
+}
+
+#findOtherChannels
+{
+	color: #FFF;
+	background-color: #46B1FF;
+}
+
+#switchMode
+{
+	color: #EFEFEF;
+	background-color: #666;
+}
+
+#tos
+{
+	color: #FFF;
+	background-color: #FF9D00;
+}
+
+#logOut
+{
+	color: #FFF;
+	background-color: #CB3030;
+}
+
+
+#session
+{
+	display: flex;
+	flex-wrap: wrap;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	padding: 26px;
+	width: 18%;
+	background-color: #505050;
+	box-sizing: border-box;
+}
+
+#session .avatar
+{
+	height: 32px;
+	width: 32px;
+	border-radius: 32px;
+}
+
+#session .username
+{
+	display: inline-block;
+	padding: 5px 15px;
+	font-weight: 600;
+}
+
 #messages
 {
 	position: fixed;
 	top: 0;
-	left: 11%;
+	left: 24%;
     height: calc(100vh - 154px);
-	width: 78%;
+	width: 70%;
 	box-sizing: border-box;
 	overflow-x: hidden;
     overflow-y: scroll;
@@ -483,7 +603,7 @@ form span a
 #newMessage
 {
     position: fixed;
-    left: calc(11% + 58px);
+    left: calc(24% + 58px);
     bottom: 33px;
     height: 90px;
     width: calc(78% - 116px);
@@ -526,7 +646,7 @@ form span a
     margin: 0;
     padding: 18px;
     height: 90px;
-    width: calc(78% - 116px);
+    width: calc(70% - 116px);
     font-family: "Source Sans Pro", "Arial", "Helvetica", sans-serif;
     font-size: 12pt;
 	line-height: 150%;

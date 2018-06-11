@@ -25,7 +25,20 @@
 	
 	<body>
 		
-		<div id="revealChannelSelection">Change channel</div>
+		<div id="sidebar">
+			<h3>#testchan</h3>
+			<p class="description">This is a super cool test channel for all kinds of super cool test stuff. No rules :DDD</p>
+			<br>
+			<span id="onlineOnChannel" class="sidebarButton"><b id="onlineCount">17</b> online</span><br><br><br><br><br>
+			<span id="findOtherChannels" class="sidebarButton">Find other channels</span>
+			<span id="switchMode" class="sidebarButton">Switch to dark mode</span>
+			<span id="tos" class="sidebarButton">Terms of use</span>
+			<span id="logOut" class="sidebarButton">Log out</span>
+			<div id="session">
+				<img src="/static/img/avatar.jpg" class="avatar">
+				<span class="username">@aliylikoski</span>
+			</div>
+		</div>
 		<div id="switchChannelMenu" class="popup">
             <a class="hidePopup">×</a>
 			<h1>Valitse kanava</h1>
@@ -133,7 +146,6 @@
 			
 			<div id="newMessage">
 				<span class="loggedInAs">Sisäänkirjautuneena käyttäjällä <b>@aliylikoski</b></span>
-				<span class="logOut">Kirjaudu ulos</span>
 				<form id="postmessage" method="post">
 					<textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
 					<div id="submitBackground"><input type="submit" value=""></div>
@@ -143,7 +155,6 @@
 		</div>
 		
 		<footer>
-			<span id="footerSwitchMode" class="switchMode"></span>
 		</footer>
 		
 	</body>
