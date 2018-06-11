@@ -19,10 +19,10 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    connect(args.database, host='94.237.26.34')
+    connect(args.database)
 
     handler = partial(Handler, directory=args.directory)
-    server = ThreadedServer(('localhost', args.port), handler)
+    server = ThreadedServer(('0.0.0.0', args.port), handler)
 
     host, port = server.server_address
 
