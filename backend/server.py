@@ -13,7 +13,7 @@ from uuid import uuid4
 from passlib.context import CryptContext
 
 from backend import errors
-from backend.db import Cookie, User
+from backend.db import Channel, Cookie, Message, User
 
 context = CryptContext(
     schemes=["argon2", "bcrypt_sha256", "scrypt"],
@@ -77,12 +77,16 @@ class Handler(SimpleHTTPRequestHandler):
         else:
             return True
 
-    def get_form(self) -> dict:
-        # TODO validation
+    def get_form(self, fields=()) -> dict:
         size = self.headers.get('Content-Length')
 
         data = self.rfile.read(int(size))
-        return json.loads(data)
+        data = json.loads(data)
+
+        if not all(field in data for field in fields):
+            raise ValueError('Must have all of the following: {}'.format(', '.join(fields)))
+
+        return data
 
     @staticmethod
     def login(form: dict):
@@ -136,8 +140,79 @@ class Handler(SimpleHTTPRequestHandler):
 
         return path + '/' * trailing_slash
 
+    def send_message(self, channel_id, form: dict):
+        session_id = self.cookie['session_id'].value
+        user = Cookie.objects.get(session_id=session_id).user
+
+        message = Message(
+            message_id=time() * 1000,
+            content=form['content'],
+            author=user
+        )
+        message.save()
+
+        try:
+            channel = Channel.objects.get(channel_id=int(channel_id))
+        except channel.DoesNotExist:
+            return self.send_status(HTTPStatus.NOT_FOUND, 'Channel not found.')
+
+        if user not in channel.users:
+            return self.send_status(HTTPStatus.UNAUTHORIZED)
+
+        channel.messages.append(message)
+        channel.save()
+
+        self.send_status(HTTPStatus.OK)
+
+    def delete_message(self, channel_id, form):
+        session_id = self.cookie['session_id'].value
+        user = Cookie.objects.get(session_id=session_id).user
+
+        channel = Channel.objects.get(channel_id=int(channel_id))
+        message_id = int(form['message_id'])
+
+        for message in reversed(channel.messages):
+            if message.message_id == message_id:
+                if message.author != user:
+                    return self.send_status(HTTPStatus.UNAUTHORIZED)
+                message.content = 'Message deleted'
+                message.save()
+                return self.send_status(HTTPStatus.OK)
+            else:
+                return self.send_status(HTTPStatus.NOT_FOUND)
+
+    def send_status(self, code=HTTPStatus.BAD_REQUEST, message=None):
+        self.send_response(code, message=message)
+        self.end_headers()
+
     def do_POST(self):
-        if self.path in ('/login', '/login/'):
+        print(self.path)
+        if self.path.startswith('/channels/'):
+            if not self.is_logged_in:
+                return self.send_status()
+
+            endpoint = self.path[len('/channels/'):]
+            channel_id, sep, endpoint = endpoint.partition('/')
+
+            print(channel_id, sep, endpoint)
+            if not sep:
+                return self.send_status()
+
+            if endpoint == 'post':
+                try:
+                    form = self.get_form(fields=['content'])
+                except ValueError as e:
+                    return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
+                self.send_message(channel_id, form)
+            elif endpoint == 'delete':
+                try:
+                    form = self.get_form(fields=['message_id'])
+                except ValueError as e:
+                    return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
+                self.delete_message(channel_id, form)
+            else:
+                self.send_status()
+        elif self.path in ('/login', '/login/'):
             form = self.get_form()
 
             try:
@@ -161,7 +236,7 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_response(HTTPStatus.OK, '/authorization.html')
                 self.end_headers()
         else:
-            self.send_error(HTTPStatus.BAD_REQUEST)
+            self.send_status()
 
     def do_GET(self):
         if self.path == '/authenticate.html' and self.is_logged_in:
