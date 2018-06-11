@@ -29,24 +29,25 @@ $(document).ready(function() {
     darkmode = getCookie("darkmode")
     
     if(darkmode == "enabled") {
-        $("#switchMode").text("Light mode");
+        $(".switchMode").text("Light mode");
         var head  = document.getElementsByTagName('head')[0];
         var link  = document.createElement('link');
         link.rel  = 'stylesheet';
         link.href = '/static/css/darkmode.css';
         head.appendChild(link);
     } else {
-        $("#switchMode").text("Dark mode");
+        $(".switchMode").text("Dark mode");
     }
     
-    $("#switchMode").click(function() {
+    $(".switchMode").click(function() {
         if(darkmode == "enabled") {
             setCookie("darkmode", "disabled", true);
             darkmode = getCookie("darkmode");
             var head  = document.getElementsByTagName('head')[0];
-            var link  = document.getElementsByTagName('link')[1];
+            var link  = document.getElementsByTagName('link')[11];
             head.removeChild(link);
-            document.getElementById("switchMode").innerHTML = "Dark mode";
+            document.getElementById("footerSwitchMode").innerHTML = "Dark mode";
+            document.getElementById("mobileChatHeaderSwitchMode").innerHTML = "Dark mode";
         } else {
             setCookie("darkmode", "enabled", true);
             darkmode = getCookie("darkmode");
@@ -55,7 +56,8 @@ $(document).ready(function() {
             link.rel  = 'stylesheet';
             link.href = '/static/css/darkmode.css';
             head.appendChild(link);
-            document.getElementById("switchMode").innerHTML = "Light mode";
+            document.getElementById("footerSwitchMode").innerHTML = "Light mode";
+            document.getElementById("mobileChatHeaderSwitchMode").innerHTML = "Light mode";
         }
     });
     

@@ -5,11 +5,29 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="mobile-web-app-capable" content="yes">
         <link href="/static/css/style.css" rel="stylesheet">
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="/static/js/script.js"></script>
         <script src="/static/js/mode.js"></script>
-        <title>Chat</title>
+        <title>Chat by Koodikärpät 2018</title>
+		<link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png" />
+		<link rel="apple-touch-icon" sizes="57x57" href="/static/img/apple-touch-icon-57x57.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="/static/img/apple-touch-icon-72x72.png" />
+		<link rel="apple-touch-icon" sizes="76x76" href="/static/img/apple-touch-icon-76x76.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="/static/img/apple-touch-icon-114x114.png" />
+		<link rel="apple-touch-icon" sizes="120x120" href="/static/img/apple-touch-icon-120x120.png" />
+		<link rel="apple-touch-icon" sizes="144x144" href="/static/img/apple-touch-icon-144x144.png" />
+		<link rel="apple-touch-icon" sizes="152x152" href="/static/img/apple-touch-icon-152x152.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon-180x180.png" />
+		<style>
+			#footerSwitchMode
+			{
+				top: 2vh;
+				z-index: 10;
+			}
+		</style>
     </head>
     
     <body>
@@ -20,7 +38,7 @@
             <a id="revealSignup" class="button gray">Luo tunnus</a>
         </div>
         
-        <div id="loginPopup" class="popupForm">
+        <div id="loginPopup" class="popup">
             <a class="hidePopup">×</a>
             <h1>Kirjaudu sisään</h1>
             <form id="login" method="post">
@@ -32,7 +50,7 @@
             <div id="loginErrorMessage"></div>
         </div>
         
-        <div id="signupPopup" class="popupForm">
+        <div id="signupPopup" class="popup">
             <a class="hidePopup">×</a>
             <h1>Luo tunnus</h1>
             <form id="signup">
@@ -46,7 +64,7 @@
         </div>
         
         <footer>
-            <span id="switchMode"></span>
+            <span id="footerSwitchMode" class="switchMode"></span>
             <span>Made by</span><span class="contrast">Koodikärpät 2018</span>
         </footer>
 

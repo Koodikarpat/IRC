@@ -1,13 +1,13 @@
 body
 {
     color: #EAEAEA !important;
-    background: #171717 !important;
+    background: #212121 !important;
 }
 
 a.button
 {
     color: #4CB4FA !important;
-    background-color: #000000 !important;
+    background-color: transparent!important;
     border: 3px solid #4CB4FA !important;
 }
 
@@ -25,15 +25,26 @@ a.button:hover
     background-image: linear-gradient(135deg, #46B1FF, #63ff9f);
 }
 
-#switchMode
+#footerSwitchMode
 {
-    color: #666;
-    background-color: #FFF;
+    color: #666 !important;
+    background-color: #FFF !important;
+}
+
+#mobileChatHeader
+{
+	background-color: #000;
+}
+
+#mobileChatHeaderSwitchMode, .logOut.mobile
+{
+    color: #BFBFBF !important;
+    background-color: #444 !important;
 }
 
 
 
-.popupForm
+.popup
 {
     background-color: #252525;
 }
@@ -91,10 +102,20 @@ textarea
 .message.me .messageBody .messageContent
 {
     color: #FFF;
-    background-color: #404040;
+    background-color: #333;
 }
 
 #newMessage textarea
 {
-	background-color: rgba(255,255,255,0.35);
+	background-color: rgba(255,255,255,0.2);
+}
+
+#newMessage textarea::placeholder
+{
+	color: #BFBFBF;
+}
+
+#newMessage span.logOut
+{
+	color: #499AD0 !important;
 }

@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	
+	var username = "aliylikoski";
+	var moderators = ["aliylioski", "pekka", "matti"];
 
 	$("#revealLogin").click(function() {
 		$("#loginPopup").show();
@@ -39,7 +42,7 @@ $(document).ready(function() {
 	
 	function hidePopup() {
 		$(".hidePopup").animate({top: "100%"}, 200);
-		$(".popupForm").animate({top: "100%"}, 200);
+		$(".popup").animate({top: "100%"}, 200);
 	}
 	
 	
@@ -222,9 +225,6 @@ $(document).ready(function() {
 		xhr_postmessage.setRequestHeader("Content-length", formData_postmessage.length);
 		xhr_postmessage.setRequestHeader("Connection", "close");
 		
-
-		var username = "aliylikoski";
-		
 		function checkTime(i) {
 			if (i < 10) {
 				i = "0" + i;
@@ -239,7 +239,7 @@ $(document).ready(function() {
 		currentM = checkTime(currentM);
 		
 		
-		var object_postmessage = {username: username, timestamp: currentH + ":" + currentM};
+		var object_postmessage = {author: username, timestamp: currentH + ":" + currentM};
 		formData_postmessage.forEach(function(value, key) {
 			object_postmessage[key] = value;
 		});
@@ -264,7 +264,7 @@ $(document).ready(function() {
 				previousMessageIsOwn = "";
 				
 				
-				document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message me ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + object_postmessage['username'] + '</span> <span class="timestamp">' + object_postmessage['timestamp'] + '</span></div><span class="messageContent">' + object_postmessage['message'] + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+				document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message me ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + object_postmessage['author'] + '</span> <span class="timestamp">' + object_postmessage['timestamp'] + '</span></div><span class="messageContent">' + object_postmessage['message'] + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
 				$("#messages").scrollTop($("#messages")[0].scrollHeight);
 				$("#postmessage textarea").val('');
 			}
@@ -291,12 +291,75 @@ $(document).ready(function() {
 	
 	
 	// Delete message
-	$(".message.me .messageContent").dblclick(function() {
-		var deleteMessageConfirmation = confirm("Oletko varma, että haluat poistaa tämän viestin?");
-		if(deleteMessageConfirmation) {
-			alert("Poistit viestin!");
+	
+	function deleteMessage(message) {
+		
+		messageAuthor = message.closest(".messageBody").find(".username").text();
+		messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
+		
+		moderatorReminder = '';
+		if(username !== messageAuthor) {
+			if(moderators.includes(username)) {
+				moderatorReminder = 'Olet poistamassa käyttäjän ' + messageAuthor + ' viestiä. Huomioi, että toisen käyttäjän viestin poistaminen on sallittua ainoastaan viestin sisällön ollessa chatin sääntöjen vastaista.\n\n';
+			} else {
+				alert('Sinulla ei ole oikeuksia poistaa käyttäjän ' + messageAuthor + ' viestiä. Voit poistaa ainoastaan omia viestejäsi.');
+				return;
+			}
 		}
+		
+		var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + moderatorReminder + 'Paina OK poistaaksesi viesti.');
+		if(deleteMessageConfirmation) {
+			message.html("<i>This message was deleted.</i>");
+			if(username == messageAuthor) {
+				message.css({"color": "#777", "opacity": 0.5});
+			} else {
+				message.css({"color": "#DDD", "opacity": 0.5});
+			}
+			
+			var xhr_deletemessage = new XMLHttpRequest();
+
+			xhr_deletemessage.open('POST', "/deletemessage/", true);
+
+			var object_deletemessage = {deletor: username, author: messageAuthor, messageId: message.attr("id")};
+			var json_deletemessage = JSON.stringify(object_deletemessage);
+
+			console.log(json_deletemessage);
+			xhr_deletemessage.send(json_deletemessage);
+
+			xhr_deletemessage.onreadystatechange = function() {
+				if(this.readyState == 4) {
+					console.log("UBER FANCY");
+				}
+			}
+		}
+	}
+	
+	$(".message .messageContent").dblclick(function() {
+		deleteMessage($(this));
 	});
+	
+	
+	// Logout / leave chat
+	
+	function logOut() {
+		var xhr_logout = new XMLHttpRequest();
+
+		xhr_logout.open('POST', "/logout/", true);
+		
+		xhr_logout.send();
+
+		xhr_logout.onreadystatechange = function() {
+			if(this.readyState == 4) {
+				console.log("UBER FANCY, you are now logged out :D (at least I hope so)");
+			}
+		}
+	}
+	
+	$(".logOut").click(function() {
+		logOut();
+	});
+	
+	
 	
 	
 	// Postmessage form
@@ -309,9 +372,21 @@ $(document).ready(function() {
 		}
 	});
 	
+	// MENU STUFF
+	
+	$("#revealChannelSelection").click(function() {
+		$("#switchChannelMenu").show();
+		$("#switchChannelMenu").animate({top: "0%"}, 200);
+		$(".hidePopup").show();
+		$(".hidePopup").animate({top: "2%"}, 200);
+	});
 	
 	
 });
+
+
+
+// Alerts and stuff
 
 function loginErrorMessage(message) {
 	$("#loginErrorMessage").html(message);
@@ -321,6 +396,8 @@ function loginErrorMessage(message) {
 }
 
 function fancyAlert(message) {
+    $("#fancyAlert").clearQueue();
+	$("#fancyAlert").animate({top: "-4%", opacity: "0"}, 200);
 	$("#fancyAlert").html(message);
 	$("#fancyAlert").show();
 	$("#fancyAlert").animate({top: "4%", opacity: "1"}, 200);

@@ -4,7 +4,7 @@ body
 {
     padding: 7% 12%;
     height: 100vh;
-    width: 100%;
+    width: 90vw;
 	color: #FFF;
     font-family: "Source Sans Pro", "Arial", "Helvetica", sans-serif;
 	background: linear-gradient(140deg, #46B1FF, #63ff9f);
@@ -71,29 +71,70 @@ header nav ul li a:hover
 }
 
 
-#switchMode
+
+
+
+
+
+#revealChannelSelection
 {
     position: fixed;
     left: 2vh;
-    bottom: 2vh;
-    padding: 12px 0;
-    height: 54px;
-    width: 54px;
-    color: #BABABA;
+    top: 2vh;
+    color: #FFF;
+    background-color: transparent;
+    padding: 11px 0;
+    height: 58px;
+    width: 58px;
     font-size: 9pt;
     text-align: center;
-    background-color: #000;
-    border-radius: 54px;
+	border: 3px solid #FFF;
+    border-radius: 6px;
     box-sizing: border-box;
     cursor: pointer;
     transition: all 200ms;
 }
 
-#switchMode:hover
+#switchChannelMenu
+{
+	z-index: 1000;
+}
+
+
+
+.switchMode, .logOut.mobile
+{
+    padding: 11px 6px;
+    height: 58px;
+    width: 58px;
+    font-size: 9pt;
+    text-align: center;
+    border-radius: 6px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 200ms;
+}
+
+.switchMode:hover, #revealChannelSelection:hover, .logOut.mobile:hover
 {
     transform: scale(1.12);
 }
 
+#footerSwitchMode
+{
+    position: fixed;
+    top: calc(4vh + 58px);
+    left: 2vh;
+    color: #000;
+    background-color: transparent;
+	border: 3px solid #000;
+    border-radius: 6px;
+}
+
+#mobileChatHeader
+{
+	display: none;
+}
 
 footer
 {
@@ -180,7 +221,7 @@ a.button:hover
     transform: scale(1.05);
 }
 
-.popupForm
+.popup
 {
     display: none;
     position: fixed;
@@ -192,9 +233,10 @@ a.button:hover
     color: #4CB4FA;
     background-color: #FFF;
     box-sizing: border-box;
+	z-index: 100;
 }
 
-.popupForm h1
+.popup h1
 {
     margin-bottom: 52px;
     color: transparent;
@@ -214,6 +256,7 @@ a.button:hover
     font-size: 48pt;
     font-weight: 300;
 	cursor: pointer;
+	z-index: 10000;
 }
 
 .hidePopup:hover
@@ -437,13 +480,6 @@ form span a
     font-weight: 400;
 }
 
-#chatFade
-{
-	position: fixed;
-	height: 36px;
-	
-}
-
 #newMessage
 {
     position: fixed;
@@ -461,19 +497,19 @@ form span a
 	top: 98px;
 	left: 10px;
 	height: 36px;
-	width: 50%;
+	width: 70%;
 	color: #777;
 	font-size: 10pt;
 	text-align: left;
 }
 
-#newMessage span.leaveChat
+#newMessage span.logOut
 {
 	display: block;
 	position: relative;
 	top: 62px;
-	left: calc(50% - 10px);
-	width: 50%;
+	left: calc(70% - 10px);
+	width: 30%;
 	color: #14A0FF;
 	font-size: 10pt;
 	text-align: right;
@@ -540,4 +576,108 @@ form span a
 #newMessage #submitBackground:hover input[type=submit]
 {
 	transform: scale(1.1);
+}
+
+
+
+/* Adaptions for mobile devices */
+
+@media only screen and (max-width: 660px)
+{
+	body
+	{
+		padding: 3% 2%;
+		overflow: hidden !important;
+	}
+	
+	#chatBody
+	{
+		overflow: hidden !important;
+	}
+	
+	#messages
+	{
+		top: 60px;
+		left: 2%;
+		padding-bottom: 26px;
+    	height: calc(100vh - 140px);
+		width: 96%;
+	}
+	
+	#newMessage
+	{
+    	width: 100vw;
+	}
+	
+	#newMessage textarea
+	{
+    	left: 0;
+		bottom: 0;
+		/* padding-right: 85px; */
+		height: 80px;
+    	width: 100vw;
+		border-radius: 0 !important;
+		box-sizing: border-box;
+		overflow: hidden !important;
+	}
+	
+
+	#mobileChatHeader
+	{
+		display: flex;
+		flex-wrap: wrap;
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 60px;
+		width: 100%;
+		background-color: #FFF;
+		box-sizing: border-box;
+	}
+	
+	#mobileChatHeaderSwitchMode, .logOut
+	{
+		height: 30px !important;
+		margin: 15px 4% !important;
+		padding: 8px 0 !important;
+		width: 20% !important;
+		color: #000;
+		background-color: #EAEAEA;
+		border-radius: 4px !important;
+	}
+	
+	.loggedInAs
+	{
+		display: inline-block;
+		padding: 19px 0;
+		width: 44%;
+    	color: transparent;
+		font-size: 14pt;
+    	background-clip: text;
+    	-webkit-background-clip: text;
+    	background-image: linear-gradient(140deg, #46B1FF, #63ff9f);
+		text-align: center;
+	}
+	
+	.logOut
+	{
+		display: inline-block;
+	}
+	
+	
+	#footerSwitchMode
+	{
+		display: none;
+	}
+
+	#newMessage span.loggedInAs
+	{
+		display: none;
+	}
+
+	#newMessage span.logOut
+	{
+		display: none;
+	}
+	
 }
