@@ -1,8 +1,0 @@
-@keyframes spin {
-    from {-webkit-transform: red;}
-    to {color: blue;}
-}
-
-p {
-    animation: spin 1s infinite;
-}

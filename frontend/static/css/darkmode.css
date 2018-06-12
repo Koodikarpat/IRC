@@ -1,20 +1,20 @@
 body
 {
     color: #EAEAEA !important;
-    background: #171717 !important;
+    background: #212121 !important;
 }
 
 a.button
 {
-    color: #4CB4FA;
-    background-color: #000000 !important;
+    color: #4CB4FA !important;
+    background-color: transparent!important;
     border: 3px solid #4CB4FA !important;
 }
 
 a.button:hover
 {
-    color: #63ff9f;
-    border: 3px solid #63ff9f !important;
+    color: #63FF9F !important;
+    border: 3px solid #63FF9F !important;
 }
 
 #authenticateBody h1, p
@@ -25,36 +25,43 @@ a.button:hover
     background-image: linear-gradient(135deg, #46B1FF, #63ff9f);
 }
 
-#switchMode
+
+#mobileChatHeader
 {
-    color: #666;
-    background-color: #FFF;
-    box-shadow: 0px 0px 6px rgba(255,255,255,0.6);
+	background-color: #000;
+}
+
+#mobileChatHeaderSwitchMode, .logOut.mobile
+{
+    color: #BFBFBF !important;
+    background-color: #444 !important;
 }
 
 
 
-.popupForm
+.popup
 {
     background-color: #252525;
 }
 
 input:not([type=submit])
 {
+	color: #7FCBFF;
     background-color: #101010;
 }
 
-input:not([type=submit])
+
+input[type=submit]:disabled
 {
-    background-color: #101010;
+	color: #555;
+    background: #333 !important;
+	transform: none !important;
 }
-
 
 header
 {
     background: #282828;
 }
-
 
 footer span
 {
@@ -89,5 +96,20 @@ textarea
 .message.me .messageBody .messageContent
 {
     color: #FFF;
-    background-color: #404040;
+    background-color: #333;
+}
+
+#newMessage textarea
+{
+	background-color: rgba(255,255,255,0.2);
+}
+
+#newMessage textarea::placeholder
+{
+	color: #BFBFBF;
+}
+
+#newMessage span.logOut
+{
+	color: #499AD0 !important;
 }
