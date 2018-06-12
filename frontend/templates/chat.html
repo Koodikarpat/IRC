@@ -29,8 +29,10 @@
 			<h3>#testchan</h3>
 			<p class="description">This is a super cool test channel for all kinds of super cool test stuff. No rules :DDD</p>
 			<br>
-			<span id="onlineOnChannel" class="sidebarButton"><b id="onlineCount">17</b> online</span><br><br><br><br><br>
-			<span id="findOtherChannels" class="sidebarButton">Find other channels</span>
+			<span id="onlineOnChannel" class="sidebarButton"><b id="onlineCount">17</b> online</span>
+			<span id="inviteToChannel" class="sidebarButton">Invite to channel</span>
+			<br><br><br>
+			<span id="findChannels" class="sidebarButton">Find channels</span>
 			<span id="switchMode" class="sidebarButton">Switch to dark mode</span>
 			<span id="tos" class="sidebarButton">Terms of use</span>
 			<span id="logOut" class="sidebarButton">Log out</span>
@@ -39,9 +41,27 @@
 				<span class="username">@aliylikoski</span>
 			</div>
 		</div>
+		<div id="inviteToChannelPopup" class="popup">
+            <a class="hidePopup">×</a>
+			<h1>Kutsu kanavalle</h1>
+			<form id="invitetochannel" method="post">
+				<input id="invitedUser" name="invitedUser" placeholder="Kirjoita käyttäjänimi …">
+				<input type="submit" value="Kutsu">
+			</form>
+        </div>
 		<div id="switchChannelMenu" class="popup">
             <a class="hidePopup">×</a>
-			<h1>Valitse kanava</h1>
+			<h1>Liity kanavalle</h1>
+			<p>tai</p>
+			<h1>Luo oma kanava</h1>
+			<form id="createchannel" method="post">
+				<input id="channelname" name="channelname" placeholder="Kirjoita kanavan nimi …">
+				<input type="submit" value="Luo">
+			</form>
+        </div>
+		<div id="tosPopup" class="popup">
+            <a class="hidePopup">×</a>
+			<h1>Palvelun käyttöehdot</h1>
         </div>
 		
 		<div id="chatBody">
@@ -142,10 +162,7 @@
 				</div>
 			</div>
 			
-			<div id="chatFade"></div>
-			
 			<div id="newMessage">
-				<span class="loggedInAs">Sisäänkirjautuneena käyttäjällä <b>@aliylikoski</b></span>
 				<form id="postmessage" method="post">
 					<textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
 					<div id="submitBackground"><input type="submit" value=""></div>

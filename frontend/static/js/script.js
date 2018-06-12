@@ -213,7 +213,6 @@ $(document).ready(function() {
 	});
 	
 	
-	
 	function sendMessage() {
 		var form_postmessage = document.getElementById("postmessage");
 		var xhr_postmessage = new XMLHttpRequest();
@@ -258,15 +257,12 @@ $(document).ready(function() {
 				} else {
 					previousMessageIsOwn = "";
 				}
+				
+				previousMessageIsOwn = "";
 				*/
 				
 				
-				previousMessageIsOwn = "";
-				
-				
-				document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message me ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + object_postmessage['author'] + '</span> <span class="timestamp">' + object_postmessage['timestamp'] + '</span></div><span class="messageContent">' + object_postmessage['message'] + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-				$("#messages").scrollTop($("#messages")[0].scrollHeight);
-				$("#postmessage textarea").val('');
+				incomingChatMessage(object_postmessage['author'], object_postmessage['timestamp'], object_postmessage['message']);
 			}
 		}
 	}
@@ -302,7 +298,7 @@ $(document).ready(function() {
 			if(moderators.includes(username)) {
 				moderatorReminder = 'Olet poistamassa käyttäjän ' + messageAuthor + ' viestiä. Huomioi, että toisen käyttäjän viestin poistaminen on sallittua ainoastaan viestin sisällön ollessa chatin sääntöjen vastaista.\n\n';
 			} else {
-				alert('Sinulla ei ole oikeuksia poistaa käyttäjän ' + messageAuthor + ' viestiä. Voit poistaa ainoastaan omia viestejäsi.');
+				alert('Sinulla ei ole oikeuksia poistaa käyttäjän ' + messageAuthor + ' viestiä. Voit poistaa ainoastaan omia viestejäsi.\n\nMikäli viesti mielestäsi rikkoo chatin sääntöjä, ota yhteyttä ylläpitoon.');
 				return;
 			}
 		}
@@ -362,6 +358,44 @@ $(document).ready(function() {
 	
 	
 	
+	// Create channel
+	
+	
+	
+	
+	// http requests n stuff
+	$("#createchannel").on('submit', function(e) {
+		e.preventDefault();
+		
+		var form_createchannel = document.getElementById("createchannel");
+		var xhr_createchannel = new XMLHttpRequest();
+		
+		xhr_createchannel.open('POST', "/createchannel/", true);
+		
+		var formData_createchannel = new FormData(form_createchannel);
+		
+		xhr_createchannel.setRequestHeader("Content-length", formData_createchannel.length);
+		xhr_createchannel.setRequestHeader("Connection", "close");
+		
+		var object_createchannel = {};
+		formData_createchannel.forEach(function(value, key) {
+			object_createchannel[key] = value;
+		});
+		var json_createchannel = JSON.stringify(object_createchannel);
+		
+		console.log(json_createchannel);
+		xhr_createchannel.send(json_createchannel);
+		
+		xhr_createchannel.onreadystatechange = function() {
+			if(this.readyState == 4) {
+				console.log("UBER FANCY");
+			}
+		}
+	});
+	
+	
+	
+	
 	// Postmessage form
 	
 	$("#postmessage textarea").keyup(function() {
@@ -374,9 +408,24 @@ $(document).ready(function() {
 	
 	// MENU STUFF
 	
-	$("#revealChannelSelection").click(function() {
+	
+	$("#inviteToChannel").click(function() {
+		$("#inviteToChannelPopup").show();
+		$("#inviteToChannelPopup").animate({top: "0%"}, 200);
+		$(".hidePopup").show();
+		$(".hidePopup").animate({top: "2%"}, 200);
+	});
+	
+	$("#findChannels").click(function() {
 		$("#switchChannelMenu").show();
 		$("#switchChannelMenu").animate({top: "0%"}, 200);
+		$(".hidePopup").show();
+		$(".hidePopup").animate({top: "2%"}, 200);
+	});
+	
+	$("#tos").click(function() {
+		$("#tosPopup").show();
+		$("#tosPopup").animate({top: "0%"}, 200);
 		$(".hidePopup").show();
 		$(".hidePopup").animate({top: "2%"}, 200);
 	});
@@ -384,6 +433,11 @@ $(document).ready(function() {
 	
 });
 
+
+
+// session
+
+var currentUsername = "aliylikoski"
 
 
 // Alerts and stuff
@@ -404,10 +458,15 @@ function fancyAlert(message) {
 	$("#fancyAlert").delay(2000).animate({top: "-4%", opacity: "0"}, 200);
 }
 
-function incomingChatMessage(username, timestamp, message) {
-	previousMessageIsOwn = "";
+function incomingChatMessage(author, timestamp, message) {
 	
-	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + previousMessageIsOwn + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + username + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+	if(author == currentUsername) {
+		me = "me";
+	} else {
+		me = "";
+	}
+	
+	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
 	$("#messages").scrollTop($("#messages")[0].scrollHeight);
 	$("#postmessage textarea").val('');
 }

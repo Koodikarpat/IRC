@@ -427,7 +427,13 @@ form span a
 	background-color: #3ED133;
 }
 
-#findOtherChannels
+#inviteToChannel
+{
+	color: #0094ff;
+	background-color: #EAEAEA;
+}
+
+#findChannels
 {
 	color: #FFF;
 	background-color: #46B1FF;
@@ -701,6 +707,16 @@ form span a
 
 
 /* Adaptions for mobile devices */
+
+
+
+@media only screen and (max-width: 1060px)
+{
+	#sidebar
+	{
+		width: 22%;
+	}
+}
 
 @media only screen and (max-width: 660px)
 {
