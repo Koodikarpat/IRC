@@ -26,10 +26,10 @@
 	<body>
 		
 		<div id="sidebar">
-			<h3>#testchan</h3>
-			<p class="description">This is a super cool test channel for all kinds of super cool test stuff. No rules :DDD</p>
+			<h3 id="channelName"></h3>
+			<p id="channelDescription" class="description">This is a super cool test channel for all kinds of super cool test stuff. No rules :DDD</p>
 			<br>
-			<span id="onlineOnChannel" class="sidebarButton"><b id="onlineCount">17</b> online</span>
+			<span id="onlineOnChannel" class="sidebarButton"><b id="channelOnlineCount"></b> online</span>
 			<span id="inviteToChannel" class="sidebarButton">Invite to channel</span>
 			<br><br><br>
 			<span id="findChannels" class="sidebarButton">Find channels</span>
@@ -66,100 +66,15 @@
 		
 		<div id="chatBody">
 			<div id="mobileChatHeader">
-				<span id="mobileChatHeaderSwitchMode" class="switchMode mobile"></span>
-				<span class="loggedInAs"><b>@aliylikoski</b></span>
-				<span class="logOut mobile">Log out</span>
+				<h3>#testchannel</h3>
+				<div id="mobileMenuButton" onclick="toggleMobileMenu(this)">
+					<div class="bar1"></div>
+					<div class="bar2"></div>
+					<div class="bar3"></div>
+				</div>
 			</div>
 			
 			<div id="messages">
-				<div id="1" class="message me">
-					<img src="/static/img/avatar.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.36</span></div>
-						<span id="1" class="messageContent">Tämä on testiviesti :DDD</span>
-					</div>
-					<img src="/static/img/avatar.jpg" class="avatar avatar2">
-				</div>
-				<div id="2" class="message">
-					<img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">jokuvaan</span> <span class="timestamp">11.37</span></div>
-						<span id="2" class="messageContent">Hei Ali :)</span>
-					</div>
-					<img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
-				</div>
-				<div id="3" class="message">
-					<img src="/static/img/pekka1000.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">pekka1000</span> <span class="timestamp">11.40</span></div>
-						<span id="3" class="messageContent">Moikka</span>
-					</div>
-					<img src="/static/img/pekka1000.jpg" class="avatar avatar2">
-				</div>
-				<div id="4" class="message me">
-					<img src="/static/img/avatar.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.43</span></div>
-						<span id="4" class="messageContent">Miten menee?</span>
-					</div>
-					<img src="/static/img/avatar.jpg" class="avatar avatar2">
-				</div>
-				<div id="5" class="message me sameUserAsInPreviousMessage">
-					<img src="/static/img/avatar.jpg" class="avatar avatar1" style="height:0px;">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.43</span></div>
-						<span id="5" class="messageContent">Tästä tulee vielä hyvä chatti</span>
-					</div>
-					<img src="/static/img/avatar.jpg" class="avatar avatar2">
-				</div>
-				<div id="6" class="message">
-					<img src="/static/img/markku123.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.44</span></div>
-						<span id="6" class="messageContent">:D</span>
-					</div>
-					<img src="/static/img/markku123.jpg" class="avatar avatar2">
-				</div>
-				<div id="7" class="message me">
-					<img src="/static/img/avatar.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">aliylikoski</span> <span class="timestamp">11.44</span></div>
-						<span id="7" class="messageContent">:D</span>
-					</div>
-					<img src="/static/img/avatar.jpg" class="avatar avatar2">
-				</div>
-				<div id="8" class="message">
-					<img src="/static/img/pekka1000.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">pekka1000</span> <span class="timestamp">11.45</span></div>
-						<span id="8" class="messageContent">:D</span>
-					</div>
-					<img src="/static/img/pekka1000.jpg" class="avatar avatar2">
-				</div>
-				<div id="9" class="message">
-					<img src="/static/img/jokuvaan.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">jokuvaan</span> <span class="timestamp">11.47</span></div>
-						<span id="9" class="messageContent">:D</span>
-					</div>
-					<img src="/static/img/jokuvaan.jpg" class="avatar avatar2">
-				</div>
-				<div id="10" class="message">
-					<img src="/static/img/markku123.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.47</span></div>
-						<span id="10" class="messageContent">:D</span>
-					</div>
-					<img src="/static/img/markku123.jpg" class="avatar avatar2">
-				</div>
-				<div id="11" class="message sameUserAsInPreviousMessage">
-					<img src="/static/img/markku123.jpg" class="avatar avatar1">
-					<div class="messageBody">
-						<div class="messageData"><span class="username">markku123</span> <span class="timestamp">11.49</span></div>
-						<span id="11" class="messageContent">Pitää mennä heippa</span>
-					</div>
-					<img src="/static/img/markku123.jpg" class="avatar avatar2">
-				</div>
 			</div>
 			
 			<div id="newMessage">

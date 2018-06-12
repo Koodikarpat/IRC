@@ -431,7 +431,32 @@ $(document).ready(function() {
 	});
 	
 	
+	// Set values on channel page
+	
+	function setChannelInformation(channelName, channelDescription, channelOnlineCount) {
+		$("#channelName").text("#" + channelName);
+		$("#channelDescription").text(channelDescription);
+		$("#channelOnlineCount").text(channelOnlineCount);
+	}
+	
+	
 });
+
+
+
+
+
+// Mobile menu
+function toggleMobileMenu(button)
+{
+	button.classList.toggle("change");
+	if($("#mobileMenuButton").hasClass("change")) {
+		$("#sidebar").slideDown(200);
+	} else {
+		$("#sidebar").slideUp(200);
+	}
+}
+
 
 
 
@@ -462,11 +487,14 @@ function incomingChatMessage(author, timestamp, message) {
 	
 	if(author == currentUsername) {
 		me = "me";
+		meStyle = "right:-500px;"
 	} else {
 		me = "";
+		meStyle = "left:-500px;"
 	}
 	
-	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-	$("#messages").scrollTop($("#messages")[0].scrollHeight);
+	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
 	$("#postmessage textarea").val('');
+	$("#messages").children().last().animate({left: "0", right: "0"}, 100);
+	$("#messages").scrollTop($("#messages")[0].scrollHeight);
 }
