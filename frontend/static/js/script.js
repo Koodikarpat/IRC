@@ -274,7 +274,7 @@ $(document).ready(function() {
 	
 	
 	
-	// Chat
+	// Scroll down on chat load
 	
 	if($("#messages").length > 0) {
 		$("#messages").scrollTop($("#messages")[0].scrollHeight);

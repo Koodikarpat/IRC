@@ -734,8 +734,47 @@ form span a
 {
 	body
 	{
-		padding: 3% 2%;
+		padding: 2% 6%;
 		overflow: hidden !important;
+	}
+	
+	h1
+	{
+		font-size: 36pt;
+	}
+	
+	#authenticateBody p
+	{
+		font-size: 14pt;
+	}
+	
+	
+	a.button
+	{
+    	display: inline-block;
+		position: relative;
+		top: -18px;
+    	margin-right: 36px;
+		margin-bottom: 24px;
+    	padding: 16px 12px;
+    	width: 100%;
+		box-sizing: border-box;
+	}
+	
+	input
+	{
+		width: 100%;
+	}
+	
+	input[type=submit]
+	{
+		margin: 12px 15%;
+		width: 70%;
+	}
+	
+	form span.authAlt
+	{
+		width: 100%;
 	}
 	
 	#chatBody
