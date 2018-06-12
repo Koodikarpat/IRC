@@ -2,6 +2,7 @@ import json
 import os
 import posixpath
 import socketserver
+from contextlib import closing
 from datetime import datetime
 from http import HTTPStatus
 from http.cookies import SimpleCookie
@@ -10,6 +11,7 @@ from time import time
 from urllib.parse import unquote
 from uuid import uuid4
 
+import maya
 from passlib.context import CryptContext
 
 from backend import errors
@@ -183,6 +185,24 @@ class Handler(SimpleHTTPRequestHandler):
             else:
                 return self.send_status(HTTPStatus.NOT_FOUND)
 
+    def get_new_messages(self, channel_id: int):
+        latest = self.get_logged_in_user().latest_update
+
+        if latest is None:
+            latest = 0
+
+        messages = Channel.objects.get(channel_id=channel_id).messages
+
+        out = []
+        for message in messages:
+            if message.message_id >= latest:
+                out.append({
+                    'content': message.content,
+                    'author': message.author.username,
+                    'date': message.correct_time
+                })
+        print(out)
+
     def create_channel(self, form: dict):
         user = self.get_logged_in_user()
         channel = Channel(
@@ -192,12 +212,33 @@ class Handler(SimpleHTTPRequestHandler):
         )
         channel.save()
 
+    @staticmethod
+    def get_channels(user: User) -> str:
+        channels = Channel.objects(users__in=[user])
+
+        data = []
+        for channel in channels:
+            inner = {
+                'users': [user.username for user in channel.users],
+                'id': channel.channel_id,
+                'name': channel.name,
+                'messages': []
+            }
+            data.append(inner)
+
+            for message in sorted(channel.messages, key=lambda msg: msg.message_id):
+                inner['messages'].append({
+                    'author': message.author.username,
+                    'content': message.content,
+                    'date': '{:%d.%m %H:%M}'.format(message.correct_time)
+                })
+        return json.dumps(data)
+
     def send_status(self, code=HTTPStatus.BAD_REQUEST, message=None):
         self.send_response(code, message=message)
         self.end_headers()
 
     def do_POST(self):
-        print(self.path)
         if self.path.startswith('/channels/'):
             if not self.is_logged_in:
                 return self.send_status()
@@ -213,26 +254,36 @@ class Handler(SimpleHTTPRequestHandler):
                 else:
                     self.create_channel(form)
                     return self.send_status(HTTPStatus.OK)
+            elif channel_id == 'get':
+                user = self.get_logged_in_user()
+                data = self.get_channels(user)
+                self.send_status(HTTPStatus.OK)
+                self.end_headers()
+                self.wfile.write(data.encode())
+                return
 
             if not sep:
                 return self.send_status()
 
-            if endpoint == 'post':
+            if endpoint == 'sendmessage':
                 try:
                     form = self.get_form(fields=['content'])
                 except ValueError as e:
                     return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
                 self.send_message(channel_id, form)
-            elif endpoint == 'delete':
+            elif endpoint == 'deletemessage':
                 try:
                     form = self.get_form(fields=['message_id'])
                 except ValueError as e:
                     return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
                 self.delete_message(channel_id, form)
+            elif endpoint == 'getupdates':
+                self.get_new_messages(int(channel_id))
+                self.send_status(HTTPStatus.OK)
             else:
-                self.send_status()
+                self.send_status(HTTPStatus.BAD_REQUEST)
         elif self.path in ('/login', '/login/'):
-            form = self.get_form()
+            form = self.get_form(fields=['username', 'password'])
 
             try:
                 user = self.login(form)

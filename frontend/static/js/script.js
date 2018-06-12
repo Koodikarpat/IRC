@@ -1,3 +1,6 @@
+var data = {};
+
+
 $(document).ready(function() {
 	
 	var username = "aliylikoski";
@@ -164,7 +167,7 @@ $(document).ready(function() {
 
         fetch('/login', {
             method: 'POST',
-            body: json,
+            body: data,
             credentials: 'include' // save cookies)
         }).then(function(response) {
             if (response.redirected) {
@@ -212,28 +215,12 @@ $(document).ready(function() {
 		var form_postmessage = document.getElementById("postmessage");
 		var xhr_postmessage = new XMLHttpRequest();
 		
-		xhr_postmessage.open('POST', "/postmessage/", true);
+		xhr_postmessage.open('POST', "/channels/1528793368518/sendmessage", true);
 		
 		var formData_postmessage = new FormData(form_postmessage);
+
 		
-		xhr_postmessage.setRequestHeader("Content-length", formData_postmessage.length);
-		xhr_postmessage.setRequestHeader("Connection", "close");
-		
-		function checkTime(i) {
-			if (i < 10) {
-				i = "0" + i;
-			}
-			return i;
-		}
-		
-		var currentTimestamp = new Date();
-		var currentH = currentTimestamp.getHours()
-		var currentM = currentTimestamp.getMinutes()
-		currentH = checkTime(currentH);
-		currentM = checkTime(currentM);
-		
-		
-		var object_postmessage = {author: username, timestamp: currentH + ":" + currentM};
+		var object_postmessage = {};
 		formData_postmessage.forEach(function(value, key) {
 			object_postmessage[key] = value;
 		});
@@ -424,9 +411,30 @@ $(document).ready(function() {
 		$(".hidePopup").show();
 		$(".hidePopup").animate({top: "2%"}, 200);
 	});
-	
-	
 });
+
+// Set values on channel page
+function setChannelInformation(channelName, channelDescription, channelOnlineCount) {
+    $("#channelName").text("#" + channelName);
+    $("#channelDescription").text(channelDescription);
+    $("#channelOnlineCount").text(channelOnlineCount);
+}
+
+
+
+
+
+// Mobile menu
+function toggleMobileMenu(button)
+{
+	button.classList.toggle("change");
+	if($("#mobileMenuButton").hasClass("change")) {
+		$("#sidebar").slideDown(200);
+	} else {
+		$("#sidebar").slideUp(200);
+	}
+}
+
 
 
 
@@ -454,14 +462,49 @@ function fancyAlert(message) {
 }
 
 function incomingChatMessage(author, timestamp, message) {
-	
-	if(author == currentUsername) {
+	if (author == currentUsername) {
 		me = "me";
+		meStyle = "right:-500px;"
 	} else {
 		me = "";
+		meStyle = "left:-500px;"
 	}
 	
-	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-	$("#messages").scrollTop($("#messages")[0].scrollHeight);
+	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
 	$("#postmessage textarea").val('');
+	$("#messages").children().last().animate({left: "0", right: "0"}, 100);
+	$("#messages").scrollTop($("#messages")[0].scrollHeight);
 }
+
+
+window.onload = function() {
+    console.log(this);
+    if (this.location.pathname !== '/chat.html') {
+        return;
+    }
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', '/channels/get');
+    xhr.send();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState === 4) {
+            data = JSON.parse(this.response)[0];
+
+            setChannelInformation(data['name'], 'ashjkla', data['users'].length)
+
+            $.each(data['messages'], function(_, value) {
+                incomingChatMessage(value['author'], value['date'], value['content']);
+            });
+        }
+    }
+}
+
+function agh() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', '/channels/1528793368518/getupdates');
+    xhr.send();
+}
+
+setInterval(agh, 1000);

@@ -1,5 +1,6 @@
 from time import time
 
+import maya
 from mongoengine import Document, fields
 
 
@@ -12,7 +13,6 @@ class User(Document):
     email = fields.EmailField(required=True)
     password = fields.StringField(required=True)  # hash of password
     latest_update = fields.IntField()
-    chats = fields.ListField(fields.IntField())
 
 
 class Cookie(Document):
@@ -25,6 +25,10 @@ class Message(Document):
     message_id = fields.IntField(required=True, default=ms_time)
     content = fields.StringField(required=True)
     author = fields.ReferenceField(User, required=True)
+
+    @property
+    def correct_time(self):
+        return maya.MayaDT(self.message_id // 1000).datetime(to_timezone='Europe/Helsinki')
 
 
 class Channel(Document):

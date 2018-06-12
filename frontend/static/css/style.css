@@ -246,7 +246,7 @@ a.button:hover
     color: #4CB4FA;
     background-color: #FFF;
     box-sizing: border-box;
-	z-index: 100;
+	z-index: 10000;
 }
 
 .popup h1
@@ -269,7 +269,7 @@ a.button:hover
     font-size: 48pt;
     font-weight: 300;
 	cursor: pointer;
-	z-index: 10000;
+	z-index: 100000;
 }
 
 .hidePopup:hover
@@ -465,7 +465,7 @@ form span a
 	position: fixed;
 	left: 0;
 	bottom: 0;
-	padding: 26px;
+	height: 84px;
 	width: 18%;
 	background-color: #505050;
 	box-sizing: border-box;
@@ -473,6 +473,10 @@ form span a
 
 #session .avatar
 {
+	display: block;
+	position: fixed;
+	left: 26px;
+	bottom: 26px;
 	height: 32px;
 	width: 32px;
 	border-radius: 32px;
@@ -480,7 +484,10 @@ form span a
 
 #session .username
 {
-	display: inline-block;
+	display: block;
+	position: fixed;
+	left: 58px;
+	bottom: 26px;
 	padding: 5px 15px;
 	font-weight: 600;
 }
@@ -716,6 +723,11 @@ form span a
 	{
 		width: 22%;
 	}
+	
+	#session
+	{
+		width: 22%;
+	}
 }
 
 @media only screen and (max-width: 660px)
@@ -731,12 +743,33 @@ form span a
 		overflow: hidden !important;
 	}
 	
+	#sidebar
+	{
+		display: none;
+		position: fixed;
+		top: 80px;
+		left: 0;
+		height: calc(100vh - 80px);
+		width: 100vw;
+		z-index: 1000;
+	}
+	
+	#sidebar h3
+	{
+		display: none;
+	}
+	
+	#session
+	{
+		width: 100%;
+	}
+	
 	#messages
 	{
-		top: 60px;
+		top: 80px;
 		left: 2%;
 		padding-bottom: 26px;
-    	height: calc(100vh - 140px);
+    	height: calc(100vh - 160px);
 		width: 96%;
 	}
 	
@@ -765,41 +798,58 @@ form span a
 		position: fixed;
 		top: 0;
 		left: 0;
-		height: 60px;
+		height: 80px;
 		width: 100%;
-		background-color: #FFF;
+		background-color: #333;
 		box-sizing: border-box;
 	}
 	
-	#mobileChatHeaderSwitchMode, .logOut
-	{
-		height: 30px !important;
-		margin: 15px 4% !important;
-		padding: 8px 0 !important;
-		width: 20% !important;
-		color: #000;
-		background-color: #EAEAEA;
-		border-radius: 4px !important;
-	}
-	
-	.loggedInAs
+	#mobileChatHeader h3
 	{
 		display: inline-block;
-		padding: 19px 0;
-		width: 44%;
-    	color: transparent;
+		margin: 18px 22px;
+		padding: 10px;
+		color: #333;
 		font-size: 14pt;
-    	background-clip: text;
-    	-webkit-background-clip: text;
-    	background-image: linear-gradient(140deg, #46B1FF, #63ff9f);
-		text-align: center;
+		background: linear-gradient(140deg, #46B1FF, #63ff9f);
+		border-radius: 4px;
 	}
 	
-	.logOut
+	#mobileMenuButton
 	{
-		display: inline-block;
+		position: fixed;
+		top: 20px;
+		right: 22px;
+    	display: inline-block;
+    	cursor: pointer;
+	}
+
+	.bar1, .bar2, .bar3
+	{
+		width: 35px;
+    	height: 5px;
+    	background-color: #FFF;
+		margin: 6px 0;
+		transition: 0.4s;
 	}
 	
+	
+	.change .bar1
+	{
+    	-webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    	transform: rotate(-45deg) translate(-9px, 6px);
+	}
+	
+	.change .bar2
+	{
+		opacity: 0;
+	}
+	
+	.change .bar3
+	{
+		-webkit-transform: rotate(45deg) translate(-9px, -7px);
+		transform: rotate(45deg) translate(-9px, -7px);
+	}
 	
 	#footerSwitchMode
 	{
