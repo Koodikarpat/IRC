@@ -88,6 +88,10 @@ class Handler(SimpleHTTPRequestHandler):
 
         return data
 
+    def get_logged_in_user(self):
+        cookie = Cookie.objects.get(session_id=self.cookie['session_id'].value)
+        return cookie.user
+
     @staticmethod
     def login(form: dict):
         try:
@@ -140,9 +144,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         return path + '/' * trailing_slash
 
-    def send_message(self, channel_id, form: dict):
-        session_id = self.cookie['session_id'].value
-        user = Cookie.objects.get(session_id=session_id).user
+    def send_message(self, channel_id: str, form: dict):
+        user = self.get_logged_in_user()
 
         message = Message(
             message_id=time() * 1000,
@@ -164,9 +167,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         self.send_status(HTTPStatus.OK)
 
-    def delete_message(self, channel_id, form):
-        session_id = self.cookie['session_id'].value
-        user = Cookie.objects.get(session_id=session_id).user
+    def delete_message(self, channel_id: str, form: dict):
+        user = self.get_logged_in_user()
 
         channel = Channel.objects.get(channel_id=int(channel_id))
         message_id = int(form['message_id'])
@@ -181,6 +183,15 @@ class Handler(SimpleHTTPRequestHandler):
             else:
                 return self.send_status(HTTPStatus.NOT_FOUND)
 
+    def create_channel(self, form: dict):
+        user = self.get_logged_in_user()
+        channel = Channel(
+            name=form['name'],
+            messages=[],
+            users=[user]
+        )
+        channel.save()
+
     def send_status(self, code=HTTPStatus.BAD_REQUEST, message=None):
         self.send_response(code, message=message)
         self.end_headers()
@@ -194,7 +205,15 @@ class Handler(SimpleHTTPRequestHandler):
             endpoint = self.path[len('/channels/'):]
             channel_id, sep, endpoint = endpoint.partition('/')
 
-            print(channel_id, sep, endpoint)
+            if channel_id == 'create':
+                try:
+                    form = self.get_form(fields=['name'])
+                except ValueError as e:
+                    return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
+                else:
+                    self.create_channel(form)
+                    return self.send_status(HTTPStatus.OK)
+
             if not sep:
                 return self.send_status()
 
@@ -240,14 +259,13 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/authenticate.html' and self.is_logged_in:
-            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
-            self.send_header('Location', '/chat.html')
+            self.redirect('/chat.html')
             self.end_headers()
-
-        if self.path in self.requires_login and not self.is_logged_in:
-            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
-            self.send_header('Location', '/authenticate.html')
+            return
+        elif self.path in self.requires_login and not self.is_logged_in:
+            self.redirect('/authenticate.html')
             self.end_headers()
+            return
         else:
             super().do_GET()
 
