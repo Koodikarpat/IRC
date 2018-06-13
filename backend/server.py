@@ -160,7 +160,7 @@ class Handler(SimpleHTTPRequestHandler):
 
         try:
             channel = Channel.objects.get(channel_id=int(channel_id))
-        except channel.DoesNotExist:
+        except Channel.DoesNotExist:
             return self.send_status(HTTPStatus.NOT_FOUND, 'Channel not found.')
 
         if user not in channel.users:
