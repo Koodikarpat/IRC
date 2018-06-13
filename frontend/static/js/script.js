@@ -1,11 +1,7 @@
-var channels = {};
-var current_channel = 0;
-
-
 $(document).ready(function () {
 
     var username = "aliylikoski";
-    var moderators = ["aliylioski", "pekka", "matti"];
+    var moderators = ["aliylikoski", "pekka", "matti"];
 
     $("#revealLogin").click(function () {
         $("#loginPopup").show();
@@ -163,8 +159,8 @@ $(document).ready(function () {
         $.each(formdata, function () {
             jsondata[this.name] = this.value;
         });
-
         var json = JSON.stringify(jsondata);
+
         fetch('/login', {
             method: 'POST',
             body: json,
@@ -185,14 +181,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         var form_signup = document.getElementById("signup");
-        var xhr_signup = new XMLHttpRequest();
-
-        xhr_signup.open('POST', "/register/", true);
-
         var formData_signup = new FormData(form_signup);
-
-        xhr_signup.setRequestHeader("Content-length", formData_signup.length);
-        xhr_signup.setRequestHeader("Connection", "close");
 
         var object_signup = {};
         formData_signup.forEach(function (value, key) {
@@ -200,29 +189,34 @@ $(document).ready(function () {
         });
         var json_signup = JSON.stringify(object_signup);
 
-        console.log(json_signup);
-        xhr_signup.send(json_signup);
-
-        xhr_signup.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                console.log("UBER FANCY");
+        fetch('/register', {
+            method: 'POST',
+            body: json_signup,
+            credentials: 'include' // save cookies)
+        }).then(function (response) {
+            if (response.redirected) {
+                $(location).attr('href', response.url);
+            } else {
+                loginErrorMessage(response.statusText);
             }
-        }
+        })
     });
 
 
     function sendMessage() {
         var form_postmessage = document.getElementById("postmessage");
+        var xhr_postmessage = new XMLHttpRequest();
+
+        xhr_postmessage.open('POST', "/channels/" + current_channel + "/sendmessage", true);
+
         var formData_postmessage = new FormData(form_postmessage);
+
 
         var object_postmessage = {};
         formData_postmessage.forEach(function (value, key) {
             object_postmessage[key] = value;
         });
         var json_postmessage = JSON.stringify(object_postmessage);
-
-        var xhr_postmessage = new XMLHttpRequest();
-        xhr_postmessage.open('POST', "/channels/" + current_channel + "/sendmessage");
 
         xhr_postmessage.send(json_postmessage);
     }
@@ -238,7 +232,7 @@ $(document).ready(function () {
     });
 
 
-    // Chat
+    // Scroll down on chat load
 
     if ($("#messages").length > 0) {
         $("#messages").scrollTop($("#messages")[0].scrollHeight);
@@ -382,6 +376,8 @@ $(document).ready(function () {
         $(".hidePopup").show();
         $(".hidePopup").animate({top: "2%"}, 200);
     });
+
+
 });
 
 // Set values on channel page
@@ -405,12 +401,15 @@ function toggleMobileMenu(button) {
 
 // session
 
-var currentUsername = "a";
+var currentUsername = "aliylikoski"
 
 
 // Alerts and stuff
 
-function loginErrorMessage(message) {
+function loginErrorMessage(message, login=true) {
+    if (login) {
+        x = "#loginErrorMessage"
+    }
     $("#loginErrorMessage").html(message);
     $("#loginErrorMessage").show();
     $("#loginErrorMessage").animate({top: "4%", opacity: "1"}, 200);
@@ -427,16 +426,41 @@ function fancyAlert(message) {
 }
 
 function incomingChatMessage(author, timestamp, message) {
-    var me = "";
-    var meStyle = "";
-    if (author === currentUsername) {
+
+    if (author == currentUsername) {
         me = "me";
         meStyle = "right:-500px;"
     } else {
+        me = "";
         meStyle = "left:-500px;"
     }
 
-    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    var emojis = [
+        '\ud83c[\udf00-\udfff]',
+        '\ud83d[\udc00-\ude4f]',
+        '\ud83d[\ude80-\udeff]',
+        '\u2764\ufe0f'
+    ];
+
+    bigEmojiCheck = message.toString().replace(new RegExp(emojis.join('|'), 'g'), '');
+
+    if (bigEmojiCheck == '') {
+        bigEmojis = 'bigEmojis';
+    } else {
+        bigEmojis = '';
+    }
+
+
+    previousMessageHasSameAuthor = document.getElementById('messages').lastChild.classList + '';
+    previousMessageHasSameAuthor = previousMessageHasSameAuthor.toString();
+    console.log(previousMessageHasSameAuthor);
+    if ((author == currentUsername && previousMessageHasSameAuthor.includes(' me ')) || previousMessageHasSameAuthor.includes(author)) {
+        previousMessageHasSameAuthor = 'sameAuthorAsPreviousMessage';
+    } else {
+        previousMessageHasSameAuthor = '';
+    }
+
+    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
     $("#postmessage textarea").val('');
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);

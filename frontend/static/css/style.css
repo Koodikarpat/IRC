@@ -451,6 +451,12 @@ form span a
 	background-color: #FF9D00;
 }
 
+#tosPopup p
+{
+	color: #252525;
+	line-height: 150%;
+}
+
 #logOut
 {
 	color: #FFF;
@@ -517,7 +523,7 @@ form span a
 	right: -16px;
 }
 
-.message.sameUserAsInPreviousMessage
+.message.sameAuthorAsPreviousMessage
 {
     margin-top: 4px;
 }
@@ -576,13 +582,13 @@ form span a
 }
 
 
-.message.sameUserAsInPreviousMessage img.avatar
+.message.sameAuthorAsPreviousMessage img.avatar
 {
     height: 2px;
     opacity: 0;
 }
 
-.message.sameUserAsInPreviousMessage div.messageData
+.message.sameAuthorAsPreviousMessage div.messageData
 {
     display: none;
 }
@@ -608,10 +614,22 @@ form span a
 
 .message span.messageContent
 {
-    color: #252525;
     font-size: 12pt;
     font-weight: 400;
+	width: auto;
+	max-width: 80%;
+	word-break: break-all;
 }
+
+.message span.messageContent.bigEmojis
+{
+    padding: 8px 4px;
+	padding-bottom: 4px;
+	font-size: 28pt;
+	line-height: 100%;
+	background-color: transparent !important;
+}
+
 
 #newMessage
 {
@@ -713,6 +731,26 @@ form span a
 
 
 
+
+@media only screen and (min-width: 660px) and (max-width: 1060px)
+{
+	.popup.chatPage
+	{
+		left: 22%;
+		width: 78%;
+	}
+}
+
+@media only screen and (min-width: 1060px)
+{
+	.popup.chatPage
+	{
+		left: 18%;
+		width: 82%;
+	}
+}
+
+
 /* Adaptions for mobile devices */
 
 
@@ -734,8 +772,64 @@ form span a
 {
 	body
 	{
-		padding: 3% 2%;
+		padding: 2% 6%;
 		overflow: hidden !important;
+	}
+	
+	h1
+	{
+		font-size: 36pt;
+	}
+	
+	#authenticateBody p
+	{
+		font-size: 14pt;
+	}
+	
+	
+	a.button
+	{
+    	display: inline-block;
+		position: relative;
+		top: -18px;
+    	margin-right: 36px;
+		margin-bottom: 24px;
+    	padding: 16px 12px;
+    	width: 100%;
+		box-sizing: border-box;
+	}
+	
+	.popup
+	{
+		position: fixed;
+		z-index: 10000;
+	}
+	
+	.popup h1
+	{
+		margin-bottom: 36px;
+		font-size: 24pt;
+	}
+	
+	input
+	{
+		width: 100%;
+	}
+	
+	input[type=submit]
+	{
+		margin: 12px 15%;
+		width: 70%;
+	}
+	
+	form span.authAlt
+	{
+		width: 100%;
+	}
+	
+	.hidePopup
+	{
+		right: 7%;
 	}
 	
 	#chatBody
@@ -747,16 +841,28 @@ form span a
 	{
 		display: none;
 		position: fixed;
-		top: 80px;
+		top: 60px;
 		left: 0;
-		height: calc(100vh - 80px);
+		height: calc(100vh - 60px);
 		width: 100vw;
-		z-index: 1000;
+		z-index: 100;
+	}
+	
+	#findChannels, #switchMode, #tos, #logOut
+	{
+		position: relative;
+		top: -32px;
 	}
 	
 	#sidebar h3
 	{
 		display: none;
+	}
+	
+	.sidebarButton
+	{
+		margin-bottom: 10px;
+		padding: 6px 8px;
 	}
 	
 	#session
@@ -802,6 +908,7 @@ form span a
 		width: 100%;
 		background-color: #333;
 		box-sizing: border-box;
+		z-index: 1000;
 	}
 	
 	#mobileChatHeader h3
