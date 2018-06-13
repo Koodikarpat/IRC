@@ -610,6 +610,9 @@ form span a
 {
     font-size: 12pt;
     font-weight: 400;
+	width: auto;
+	max-width: 80%;
+	word-break: break-all;
 }
 
 .message span.messageContent.bigEmojis
