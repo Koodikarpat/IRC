@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	
 	var username = "aliylikoski";
-	var moderators = ["aliylioski", "pekka", "matti"];
+	var moderators = ["aliylikoski", "pekka", "matti"];
 
 	$("#revealLogin").click(function() {
 		$("#loginPopup").show();
@@ -209,6 +209,8 @@ $(document).ready(function() {
 	
 	
 	function sendMessage() {
+		
+		
 		var form_postmessage = document.getElementById("postmessage");
 		var xhr_postmessage = new XMLHttpRequest();
 		
@@ -246,15 +248,6 @@ $(document).ready(function() {
 			if(this.readyState == 4) {
 				console.log("UBER LIT™");
 				
-				/*
-				if(document.getElementById('messages').lastChild.classList.contains('me') == true) {
-					previousMessageIsOwn = "sameUserAsInPreviousMessage"
-				} else {
-					previousMessageIsOwn = "";
-				}
-				
-				previousMessageIsOwn = "";
-				*/
 				
 				
 				incomingChatMessage(object_postmessage['author'], object_postmessage['timestamp'], object_postmessage['message']);
@@ -488,7 +481,31 @@ function incomingChatMessage(author, timestamp, message) {
 		meStyle = "left:-500px;"
 	}
 	
-	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + me + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+	var emojis = [
+		'\ud83c[\udf00-\udfff]',
+		'\ud83d[\udc00-\ude4f]',
+		'\ud83d[\ude80-\udeff]',
+		'\u2764\ufe0f'
+	];
+	
+	bigEmojiCheck = message.toString().replace(new RegExp(emojis.join('|'), 'g'), '');
+	
+	if(bigEmojiCheck == '') {
+		bigEmojis = 'bigEmojis';
+	} else {
+		bigEmojis = '';
+	}
+		
+	previousMessageHasSameAuthor = document.getElementById('messages').lastChild.classList + '';
+	previousMessageHasSameAuthor = previousMessageHasSameAuthor.toString();
+	console.log(previousMessageHasSameAuthor);
+	if((author == currentUsername && previousMessageHasSameAuthor.includes(' me ')) || previousMessageHasSameAuthor.includes(author)) {
+		previousMessageHasSameAuthor = 'sameAuthorAsPreviousMessage';
+	} else {
+		previousMessageHasSameAuthor = '';
+	}
+	
+	document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
 	$("#postmessage textarea").val('');
 	$("#messages").children().last().animate({left: "0", right: "0"}, 100);
 	$("#messages").scrollTop($("#messages")[0].scrollHeight);

@@ -517,7 +517,7 @@ form span a
 	right: -16px;
 }
 
-.message.sameUserAsInPreviousMessage
+.message.sameAuthorAsPreviousMessage
 {
     margin-top: 4px;
 }
@@ -576,13 +576,13 @@ form span a
 }
 
 
-.message.sameUserAsInPreviousMessage img.avatar
+.message.sameAuthorAsPreviousMessage img.avatar
 {
     height: 2px;
     opacity: 0;
 }
 
-.message.sameUserAsInPreviousMessage div.messageData
+.message.sameAuthorAsPreviousMessage div.messageData
 {
     display: none;
 }
@@ -608,10 +608,19 @@ form span a
 
 .message span.messageContent
 {
-    color: #252525;
     font-size: 12pt;
     font-weight: 400;
 }
+
+.message span.messageContent.bigEmojis
+{
+    padding: 8px 4px;
+	padding-bottom: 4px;
+	font-size: 28pt;
+	line-height: 100%;
+	background-color: transparent !important;
+}
+
 
 #newMessage
 {
@@ -761,6 +770,18 @@ form span a
 		box-sizing: border-box;
 	}
 	
+	.popup
+	{
+		position: fixed;
+		z-index: 10000;
+	}
+	
+	.popup h1
+	{
+		margin-bottom: 36px;
+		font-size: 24pt;
+	}
+	
 	input
 	{
 		width: 100%;
@@ -777,6 +798,11 @@ form span a
 		width: 100%;
 	}
 	
+	.hidePopup
+	{
+		right: 7%;
+	}
+	
 	#chatBody
 	{
 		overflow: hidden !important;
@@ -786,16 +812,28 @@ form span a
 	{
 		display: none;
 		position: fixed;
-		top: 80px;
+		top: 60px;
 		left: 0;
-		height: calc(100vh - 80px);
+		height: calc(100vh - 60px);
 		width: 100vw;
-		z-index: 1000;
+		z-index: 100;
+	}
+	
+	#findChannels, #switchMode, #tos, #logOut
+	{
+		position: relative;
+		top: -32px;
 	}
 	
 	#sidebar h3
 	{
 		display: none;
+	}
+	
+	.sidebarButton
+	{
+		margin-bottom: 10px;
+		padding: 6px 8px;
 	}
 	
 	#session
@@ -841,6 +879,7 @@ form span a
 		width: 100%;
 		background-color: #333;
 		box-sizing: border-box;
+		z-index: 1000;
 	}
 	
 	#mobileChatHeader h3
