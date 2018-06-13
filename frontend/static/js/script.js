@@ -495,6 +495,9 @@ function incomingChatMessage(author, timestamp, message) {
 	} else {
 		bigEmojis = '';
 	}
+	
+	
+
 		
 	previousMessageHasSameAuthor = document.getElementById('messages').lastChild.classList + '';
 	previousMessageHasSameAuthor = previousMessageHasSameAuthor.toString();

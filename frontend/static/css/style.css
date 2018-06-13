@@ -451,6 +451,12 @@ form span a
 	background-color: #FF9D00;
 }
 
+#tosPopup p
+{
+	color: #252525;
+	line-height: 150%;
+}
+
 #logOut
 {
 	color: #FFF;
@@ -723,6 +729,26 @@ form span a
 	transform: scale(1.1);
 }
 
+
+
+
+@media only screen and (min-width: 660px) and (max-width: 1060px)
+{
+	.popup.chatPage
+	{
+		left: 22%;
+		width: 78%;
+	}
+}
+
+@media only screen and (min-width: 1060px)
+{
+	.popup.chatPage
+	{
+		left: 18%;
+		width: 82%;
+	}
+}
 
 
 /* Adaptions for mobile devices */
