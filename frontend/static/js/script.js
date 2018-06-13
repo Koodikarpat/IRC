@@ -31,7 +31,7 @@ $(document).ready(function () {
 
 
     $(document).keyup(function (e) {
-        if (e.keyCode == 27) {
+        if (e.keyCode === 27) {
             hidePopup();
         }
     });
@@ -71,17 +71,13 @@ $(document).ready(function () {
     });
 
     function checkIfUsernameIsValid() {
-        if ($("#signup_username").val() == "") {
-            validUsername = false;
-        } else {
-            validUsername = true;
-        }
+        var validUsername = $("#signup_username").val() !== "";
     }
 
     function checkIfEmailIsValid() {
         email = $("#signup_email").val();
         emailCheck = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if ($("#signup_email").val() == "") {
+        if ($("#signup_email").val() === "") {
             $("#signup_email_alert").fadeOut();
             $("#signup_email_alert").text("");
             validEmail = false;
@@ -97,7 +93,7 @@ $(document).ready(function () {
     }
 
     function checkIfPasswordsMatch() {
-        if ($("#signup_password").val() == "" && $("#signup_password2").val() == "") {
+        if ($("#signup_password").val() === "" && $("#signup_password2").val() === "") {
             $("#signup_password_alert").fadeOut();
             $("#signup_password_alert").text("");
             $("#signup_password2_alert").fadeOut();
@@ -123,7 +119,7 @@ $(document).ready(function () {
     }
 
     function checkIfSignupFormIsValid() {
-        if (validUsername == true && validEmail == true && validPasswords == true) {
+        if (validUsername && validEmail && validPasswords) {
             $("input[type=submit]").removeAttr('disabled');
         } else {
             $("input[type=submit]").attr('disabled', 'disabled');
@@ -142,7 +138,7 @@ $(document).ready(function () {
     // new message form
 
     $("textarea").keydown(function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
+        if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
             $("#postmessage").submit();
         }
@@ -401,15 +397,14 @@ function toggleMobileMenu(button) {
 
 // session
 
-var currentUsername = "aliylikoski"
+var currentUsername = "";
+var channels = [];
+var current_channel = 0;
 
 
 // Alerts and stuff
 
-function loginErrorMessage(message, login=true) {
-    if (login) {
-        x = "#loginErrorMessage"
-    }
+function loginErrorMessage(message) {
     $("#loginErrorMessage").html(message);
     $("#loginErrorMessage").show();
     $("#loginErrorMessage").animate({top: "4%", opacity: "1"}, 200);
@@ -442,9 +437,9 @@ function incomingChatMessage(author, timestamp, message) {
         '\u2764\ufe0f'
     ];
 
-    bigEmojiCheck = message.toString().replace(new RegExp(emojis.join('|'), 'g'), '');
+    var bigEmojiCheck = message.toString().replace(new RegExp(emojis.join('|'), 'g'), '');
 
-    if (bigEmojiCheck == '') {
+    if (bigEmojiCheck === '') {
         bigEmojis = 'bigEmojis';
     } else {
         bigEmojis = '';
@@ -471,6 +466,17 @@ window.onload = function () {
     if (this.location.pathname !== '/chat.html') {
         return;
     }
+
+    fetch('/me', {
+        method: 'POST',
+        credentials: 'include'
+    })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (json) {
+            currentUsername = json['username'];
+        });
 
     fetch('/channels/get', {
         method: 'POST',

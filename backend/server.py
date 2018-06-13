@@ -2,7 +2,6 @@ import json
 import os
 import posixpath
 import socketserver
-from contextlib import closing
 from datetime import datetime
 from http import HTTPStatus
 from http.cookies import SimpleCookie
@@ -11,7 +10,6 @@ from time import time
 from urllib.parse import unquote
 from uuid import uuid4
 
-import maya
 from passlib.context import CryptContext
 
 from backend import errors
@@ -91,7 +89,11 @@ class Handler(SimpleHTTPRequestHandler):
         return data
 
     def get_logged_in_user(self):
-        cookie = Cookie.objects.get(session_id=self.cookie['session_id'].value)
+        session_id = self.cookie.get('session_id')
+        if session_id is None:
+            raise errors.LoginError('Must be logged in.')
+
+        cookie = Cookie.objects.get(session_id=session_id.value)
         return cookie.user
 
     @staticmethod
@@ -237,6 +239,17 @@ class Handler(SimpleHTTPRequestHandler):
         channel.save()
         self.send_status(HTTPStatus.OK)
 
+    def send_me(self):
+        user = self.get_logged_in_user()
+        data = {
+            'username': user.username,
+            'email': user.email
+        }
+
+        msg = json.dumps(data)
+        self.send_status(HTTPStatus.OK)
+        self.wfile.write(msg.encode())
+
     @staticmethod
     def get_channels(user: User) -> str:
         channels = Channel.objects(users__in=[user])
@@ -337,6 +350,11 @@ class Handler(SimpleHTTPRequestHandler):
                 # TODO
                 self.redirect('/authenticate.html')
                 self.end_headers()
+        elif self.path in ('/me', '/me/'):
+            try:
+                self.send_me()
+            except errors.LoginError as e:
+                self.send_status(HTTPStatus.UNAUTHORIZED, str(e))
         else:
             self.send_status()
 
