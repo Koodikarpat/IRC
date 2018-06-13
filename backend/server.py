@@ -186,7 +186,8 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.send_status(HTTPStatus.NOT_FOUND)
 
     def get_new_messages(self, channel_id: int):
-        latest = self.get_logged_in_user().latest_update
+        user = self.get_logged_in_user()
+        latest = user.latest_update
 
         if latest is None:
             latest = 0
@@ -199,9 +200,12 @@ class Handler(SimpleHTTPRequestHandler):
                 out.append({
                     'content': message.content,
                     'author': message.author.username,
-                    'date': message.correct_time
+                    'date': '{:%d.%m %H:%M}'.format(message.correct_time)
                 })
-        print(out)
+
+        user.latest_update = time() * 1000
+        user.save()
+        return json.dumps(out)
 
     def create_channel(self, form: dict):
         user = self.get_logged_in_user()
@@ -241,7 +245,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path.startswith('/channels/'):
             if not self.is_logged_in:
-                return self.send_status()
+                return self.send_status(HTTPStatus.UNAUTHORIZED)
 
             endpoint = self.path[len('/channels/'):]
             channel_id, sep, endpoint = endpoint.partition('/')
@@ -258,7 +262,6 @@ class Handler(SimpleHTTPRequestHandler):
                 user = self.get_logged_in_user()
                 data = self.get_channels(user)
                 self.send_status(HTTPStatus.OK)
-                self.end_headers()
                 self.wfile.write(data.encode())
                 return
 
@@ -278,8 +281,9 @@ class Handler(SimpleHTTPRequestHandler):
                     return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
                 self.delete_message(channel_id, form)
             elif endpoint == 'getupdates':
-                self.get_new_messages(int(channel_id))
+                messages = self.get_new_messages(int(channel_id))
                 self.send_status(HTTPStatus.OK)
+                self.wfile.write(messages.encode())
             else:
                 self.send_status(HTTPStatus.BAD_REQUEST)
         elif self.path in ('/login', '/login/'):
