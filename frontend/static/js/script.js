@@ -213,12 +213,7 @@ $(document).ready(function () {
 
     function sendMessage() {
         var form_postmessage = document.getElementById("postmessage");
-        var xhr_postmessage = new XMLHttpRequest();
-
-        xhr_postmessage.open('POST', "/channels/" + current_channel + "/sendmessage");
-
         var formData_postmessage = new FormData(form_postmessage);
-
 
         var object_postmessage = {};
         formData_postmessage.forEach(function (value, key) {
@@ -226,27 +221,10 @@ $(document).ready(function () {
         });
         var json_postmessage = JSON.stringify(object_postmessage);
 
-        console.log(json_postmessage);
+        var xhr_postmessage = new XMLHttpRequest();
+        xhr_postmessage.open('POST', "/channels/" + current_channel + "/sendmessage");
+
         xhr_postmessage.send(json_postmessage);
-
-        xhr_postmessage.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                console.log("UBER LIT™");
-
-                /*
-                if(document.getElementById('messages').lastChild.classList.contains('me') == true) {
-                    previousMessageIsOwn = "sameUserAsInPreviousMessage"
-                } else {
-                    previousMessageIsOwn = "";
-                }
-
-                previousMessageIsOwn = "";
-                */
-
-
-                incomingChatMessage(object_postmessage['author'], object_postmessage['timestamp'], object_postmessage['message']);
-            }
-        }
     }
 
 
@@ -427,7 +405,7 @@ function toggleMobileMenu(button) {
 
 // session
 
-var currentUsername = "a"
+var currentUsername = "a";
 
 
 // Alerts and stuff
@@ -496,9 +474,10 @@ window.onload = function () {
             credentials: 'include'
         })
             .then(function (response) {
-                console.log(response);
                 if (response.status === 200) {
                     return response.json();
+                } else {
+                    clearInterval(id);
                 }
             })
             .then(function (json) {
@@ -508,5 +487,5 @@ window.onload = function () {
             })
     }
 
-    setInterval(get_new, 1000);
+    var id = setInterval(get_new, 1000);
 };

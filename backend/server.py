@@ -185,14 +185,18 @@ class Handler(SimpleHTTPRequestHandler):
             else:
                 return self.send_status(HTTPStatus.NOT_FOUND)
 
-    def get_new_messages(self, channel_id: int):
+    def new_messages(self, channel_id: int):
         user = self.get_logged_in_user()
         latest = user.latest_update
 
         if latest is None:
             latest = 0
+        user.latest_update = time() * 1000
 
-        messages = Channel.objects.get(channel_id=channel_id).messages
+        try:
+            messages = Channel.objects.get(channel_id=channel_id).messages
+        except Channel.DoesNotExist:
+            return self.send_status(HTTPStatus.NOT_FOUND, 'No channel with that ID')
 
         out = []
         for message in messages:
@@ -203,9 +207,11 @@ class Handler(SimpleHTTPRequestHandler):
                     'date': '{:%d.%m %H:%M}'.format(message.correct_time)
                 })
 
-        user.latest_update = time() * 1000
         user.save()
-        return json.dumps(out)
+        messages = json.dumps(out)
+
+        self.send_status(HTTPStatus.OK)
+        self.wfile.write(messages.encode())
 
     def create_channel(self, form: dict):
         user = self.get_logged_in_user()
@@ -215,6 +221,21 @@ class Handler(SimpleHTTPRequestHandler):
             users=[user]
         )
         channel.save()
+
+    def add_user_to_channel(self, channel_id, form: dict):
+        author = self.get_logged_in_user()
+        channel = Channel.objects.get(channel_id=channel_id)
+
+        if author not in channel.users:
+            return self.send_status(HTTPStatus.UNAUTHORIZED)
+        try:
+            user = User.objects.get(username=form['username'])
+        except User.DoesNotExist:
+            return self.send_status(HTTPStatus.NOT_FOUND, 'That user does not exist.')
+
+        channel.users.append(user)
+        channel.save()
+        self.send_status(HTTPStatus.OK)
 
     @staticmethod
     def get_channels(user: User) -> str:
@@ -281,9 +302,13 @@ class Handler(SimpleHTTPRequestHandler):
                     return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
                 self.delete_message(channel_id, form)
             elif endpoint == 'getupdates':
-                messages = self.get_new_messages(int(channel_id))
-                self.send_status(HTTPStatus.OK)
-                self.wfile.write(messages.encode())
+                self.new_messages(int(channel_id))
+            elif endpoint == 'adduser':
+                try:
+                    form = self.get_form(fields=['username'])
+                except ValueError as e:
+                    return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
+                self.add_user_to_channel(int(channel_id), form)
             else:
                 self.send_status(HTTPStatus.BAD_REQUEST)
         elif self.path in ('/login', '/login/'):
@@ -299,7 +324,10 @@ class Handler(SimpleHTTPRequestHandler):
                 self.success_login(user)
                 self.end_headers()
         elif self.path in ('/register', '/register/'):
-            form = self.get_form()
+            try:
+                form = self.get_form(fields=['username', 'email', 'password'])
+            except ValueError as e:
+                return self.send_status(HTTPStatus.BAD_REQUEST, str(e))
 
             try:
                 self.signup(form)
@@ -307,7 +335,7 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_error(HTTPStatus.BAD_REQUEST, str(e))
             else:
                 # TODO
-                self.send_response(HTTPStatus.OK, '/authorization.html')
+                self.redirect('/authenticate.html')
                 self.end_headers()
         else:
             self.send_status()
