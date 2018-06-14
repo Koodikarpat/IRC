@@ -407,35 +407,6 @@ function incomingChatMessage(author, timestamp, message, id, deleted) {
     }
 	
 	
-    function deleteMessage(message) {
-
-        messageAuthor = message.closest(".messageBody").find(".username").text();
-        messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
-
-        if (username === messageAuthor) {
-            var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + 'Paina OK poistaaksesi viesti.');
-            if (!deleteMessageConfirmation) {
-                return;
-            }
-            message.html("<i>This message was deleted.</i>");
-
-            message.css({"color": "#777", "opacity": 0.5});
-
-            var xhr_deletemessage = new XMLHttpRequest();
-
-            xhr_deletemessage.open('POST', "/channels/" + current_channel + "/deletemessage", true);
-            var object_deletemessage = {message_id: message.attr("id")};
-            var json_deletemessage = JSON.stringify(object_deletemessage);
-
-            xhr_deletemessage.send(json_deletemessage);
-
-            xhr_deletemessage.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    console.log("UBER FANCY");
-                }
-            }
-        }
-    }
 	
     if (deleted) {
         document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent deletedMessage ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
@@ -449,6 +420,38 @@ function incomingChatMessage(author, timestamp, message, id, deleted) {
     // Delete message
 
 
+}
+
+
+
+function deleteMessage(message) {
+
+	messageAuthor = message.closest(".messageBody").find(".username").text();
+	messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
+
+	if (username === messageAuthor) {
+		var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + 'Paina OK poistaaksesi viesti.');
+		if (!deleteMessageConfirmation) {
+			return;
+		}
+		message.html("<i>This message was deleted.</i>");
+
+		message.css({"color": "#777", "opacity": 0.5});
+
+		var xhr_deletemessage = new XMLHttpRequest();
+
+		xhr_deletemessage.open('POST', "/channels/" + current_channel + "/deletemessage", true);
+		var object_deletemessage = {message_id: message.attr("id")};
+		var json_deletemessage = JSON.stringify(object_deletemessage);
+
+		xhr_deletemessage.send(json_deletemessage);
+
+		xhr_deletemessage.onreadystatechange = function () {
+			if (this.readyState == 4) {
+				console.log("UBER FANCY");
+			}
+		}
+	}
 }
 
 
