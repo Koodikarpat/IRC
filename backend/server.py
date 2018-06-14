@@ -191,8 +191,8 @@ class Handler(SimpleHTTPRequestHandler):
                 message.content = 'Message deleted'
                 message.save()
                 return self.send_status(HTTPStatus.OK)
-            else:
-                return self.send_status(HTTPStatus.NOT_FOUND)
+        else:
+            return self.send_status(HTTPStatus.NOT_FOUND)
 
     def new_messages(self, channel_id: int):
         user = self.get_logged_in_user()
@@ -210,6 +210,7 @@ class Handler(SimpleHTTPRequestHandler):
         for message in sorted(messages, key=lambda m: m.message_id):
             if message.message_id > latest:
                 out.append({
+                    'id': message.message_id,
                     'content': message.content,
                     'author': message.author.username,
                     'date': '{:%d.%m %H:%M}'.format(message.correct_time)
@@ -275,6 +276,7 @@ class Handler(SimpleHTTPRequestHandler):
                 inner['messages'].append({
                     'author': message.author.username,
                     'content': message.content,
+                    'id': message.message_id,
                     'date': '{:%d.%m %H:%M}'.format(message.correct_time)
                 })
         return json.dumps(data)

@@ -371,7 +371,7 @@ function fancyAlert(message) {
     $("#fancyAlert").delay(2000).animate({top: "-4%", opacity: "0"}, 200);
 }
 
-function incomingChatMessage(author, timestamp, message) {
+function incomingChatMessage(author, timestamp, message, id) {
 
     if (author == currentUsername) {
         me = "me";
@@ -406,7 +406,7 @@ function incomingChatMessage(author, timestamp, message) {
         previousMessageHasSameAuthor = '';
     }
 
-    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 
@@ -418,20 +418,19 @@ function incomingChatMessage(author, timestamp, message) {
         messageAuthor = message.closest(".messageBody").find(".username").text();
         messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
 
-        var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + moderatorReminder + 'Paina OK poistaaksesi viesti.');
-        if (deleteMessageConfirmation) {
-            message.html("<i>This message was deleted.</i>");
-            if (username == messageAuthor) {
-                message.css({"color": "#777", "opacity": 0.5});
-            } else {
-                message.css({"color": "#DDD", "opacity": 0.5});
+        if (username === messageAuthor) {
+            var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + 'Paina OK poistaaksesi viesti.');
+            if (!deleteMessageConfirmation) {
+                return;
             }
+            message.html("<i>This message was deleted.</i>");
+
+            message.css({"color": "#777", "opacity": 0.5});
 
             var xhr_deletemessage = new XMLHttpRequest();
 
-            xhr_deletemessage.open('POST', "/deletemessage/", true);
-
-            var object_deletemessage = {deletor: username, author: messageAuthor, messageId: message.attr("id")};
+            xhr_deletemessage.open('POST', "/channels/" + current_channel + "/deletemessage", true);
+            var object_deletemessage = {message_id: message.attr("id")};
             var json_deletemessage = JSON.stringify(object_deletemessage);
 
             xhr_deletemessage.send(json_deletemessage);
@@ -485,7 +484,7 @@ window.onload = function () {
             setChannelInformation(channel['name'], '', channel['users'].length)
 
             channel['messages'].forEach(function (message) {
-                incomingChatMessage(message['author'], message['date'], message['content'])
+                incomingChatMessage(message['author'], message['date'], message['content'], message['id'])
             });
         });
 
@@ -507,7 +506,7 @@ window.onload = function () {
             })
             .then(function (json) {
                 json.forEach(function (message) {
-                    incomingChatMessage(message['author'], message['date'], message['content']);
+                    incomingChatMessage(message['author'], message['date'], message['content'], message['id']);
                 })
             })
     }
