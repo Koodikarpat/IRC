@@ -405,17 +405,8 @@ function incomingChatMessage(author, timestamp, message, id, deleted) {
     } else {
         previousMessageHasSameAuthor = '';
     }
-    if (deleted) {
-        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent deletedMessage ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-    } else {
-        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '" ondblclick="deleteMessage($(this))">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-    }
-    $("#messages").children().last().animate({left: "0", right: "0"}, 100);
-    $("#messages").scrollTop($("#messages")[0].scrollHeight);
-
-
-    // Delete message
-
+	
+	
     function deleteMessage(message) {
 
         messageAuthor = message.closest(".messageBody").find(".username").text();
@@ -445,6 +436,18 @@ function incomingChatMessage(author, timestamp, message, id, deleted) {
             }
         }
     }
+	
+    if (deleted) {
+        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent deletedMessage ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    } else {
+        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '" ondblclick="deleteMessage($(this))">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    }
+    $("#messages").children().last().animate({left: "0", right: "0"}, 100);
+    $("#messages").scrollTop($("#messages")[0].scrollHeight);
+
+
+    // Delete message
+
 
 }
 
