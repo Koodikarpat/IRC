@@ -429,7 +429,7 @@ function deleteMessage(message) {
 	messageAuthor = message.closest(".messageBody").find(".username").text();
 	messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
 
-	if (username === messageAuthor) {
+	if (username === messageAuthor && !message.hasClass("deleted")) {
 		var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + 'Paina OK poistaaksesi viesti.');
 		if (!deleteMessageConfirmation) {
 			return;
