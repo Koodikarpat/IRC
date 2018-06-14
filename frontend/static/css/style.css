@@ -415,7 +415,7 @@ form span a
 	cursor: pointer;
 	transition: all 200ms;
 }
-
+r
 .sidebarButton:hover
 {
 	transform: scale(1.05);
@@ -425,6 +425,7 @@ form span a
 {
 	color: #FFF;
 	background-color: #3ED133;
+	transform: none;
 }
 
 #inviteToChannel
@@ -438,6 +439,47 @@ form span a
 	color: #FFF;
 	background-color: #46B1FF;
 }
+
+#receivedInvite
+{
+	display: block;
+	padding: 12px;
+	width: 360px;
+	background-color: #EFEFEF;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#receivedInviteChannelName
+{
+	padding: 4px;
+	font-weight: 600;
+}
+
+#acceptInvite, #rejectInvite
+{
+	display: inline-block;
+	float: right;
+	position: relative;
+	top: -4px;
+	margin-left: 6px;
+	padding: 7px 8px;
+	color: #FFF;
+	font-size: 9pt;
+	text-transform: uppercase;
+	border-radius: 4px;
+}
+
+#acceptInvite
+{
+	background-color: #00BC2B;
+}
+
+#rejectInvite
+{
+	background-color: #BC0000;
+}
+
 
 #switchMode
 {

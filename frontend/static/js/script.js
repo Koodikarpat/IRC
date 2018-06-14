@@ -280,11 +280,6 @@ $(document).ready(function () {
         }
     }
 
-    $(".message .messageContent").dblclick(function () {
-        deleteMessage($(this));
-    });
-
-
     // Logout / leave chat
 
     function logOut() {
@@ -458,6 +453,11 @@ function incomingChatMessage(author, timestamp, message) {
     document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
+	
+    $(".message .messageContent").dblclick(function () {
+        alert("Hello");
+    });
+
 }
 
 
