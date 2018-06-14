@@ -206,6 +206,8 @@ $(document).ready(function () {
 
         var formData_postmessage = new FormData(form_postmessage);
 
+        $("#postmessage textarea").val('');
+
 
         var object_postmessage = {};
         formData_postmessage.forEach(function (value, key) {
@@ -455,9 +457,6 @@ function incomingChatMessage(author, timestamp, message) {
     }
 
     document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
-    if (author === currentUsername) {
-        $("#postmessage textarea").val('');
-    }
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 }
