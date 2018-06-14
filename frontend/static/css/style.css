@@ -602,6 +602,23 @@ r
     background-color: #EFEFEF;
 }
 
+.message .messageBody .messageContent.deletedMessage
+{
+	font-style: italic;
+	opacity: 0.5;
+}
+
+.message.me .messageBody .messageContent.deletedMessage
+{
+	color: #777;
+}
+	
+.message:not(.me) .messageBody .messageContent.deletedMessage
+{
+	color: #DDD;
+}
+
+
 .message img.avatar
 {
     margin: 0 12px;
