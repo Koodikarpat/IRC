@@ -26,6 +26,7 @@ class Message(Document):
     content = fields.StringField(required=True)
     author = fields.ReferenceField(User, required=True)
     deleted = fields.BooleanField(required=True, default=False)
+    deleted_on = fields.IntField(default=0)
 
     @property
     def correct_time(self):

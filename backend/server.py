@@ -190,6 +190,7 @@ class Handler(SimpleHTTPRequestHandler):
                     return self.send_status(HTTPStatus.UNAUTHORIZED)
                 message.content = 'This message was deleted.'
                 message.deleted = True
+                message.deleted_on = time() * 1000
                 message.save()
                 return self.send_status(HTTPStatus.OK)
         else:
@@ -208,15 +209,16 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_status(HTTPStatus.NOT_FOUND, 'No channel with that ID')
 
         out = []
-        for message in sorted(messages, key=lambda m: m.message_id):
-            if message.message_id > latest:
+        for message in sorted(messages[-40:], key=lambda m: m.message_id):
+            if message.message_id > latest or message.deleted_on > latest:
                 out.append({
                     'id': message.message_id,
                     'content': message.content,
                     'author': message.author.username,
-                    'date': '{:%d.%m %H:%M}'.format(message.correct_time)
+                    'date': '{:%d.%m %H:%M}'.format(message.correct_time),
+                    'deleted': message.deleted
                 })
-                user.latest_update = message.message_id
+                user.latest_update = max(user.latest_update, message.deleted_on, message.message_id)
 
         user.save()
         messages = json.dumps(out)

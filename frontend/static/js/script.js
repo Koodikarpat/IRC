@@ -511,7 +511,17 @@ window.onload = function () {
             })
             .then(function (json) {
                 json.forEach(function (message) {
-                    incomingChatMessage(message['author'], message['date'], message['content'], message['id']);
+                    console.log(message);
+                    if (message['deleted']) {
+                        if (message['author'] !== currentUsername) {
+                            var chatMessage = document.getElementById(message['id']);
+                            console.log(chatMessage);
+                            chatMessage.innerText = 'This message was deleted.';
+                            chatMessage.classList.add('deletedMessage');
+                        }
+                    } else {
+                        incomingChatMessage(message['author'], message['date'], message['content'], message['id']);
+                    }
                 })
             })
     }
