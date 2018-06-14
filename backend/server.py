@@ -184,7 +184,7 @@ class Handler(SimpleHTTPRequestHandler):
         channel = Channel.objects.get(channel_id=int(channel_id))
         message_id = int(form['message_id'])
 
-        for message in reversed(channel.messages[-40:]):
+        for message in reversed(channel.messages):
             if message.message_id == message_id:
                 if message.author != user:
                     return self.send_status(HTTPStatus.UNAUTHORIZED)
@@ -271,7 +271,7 @@ class Handler(SimpleHTTPRequestHandler):
             }
             data.append(inner)
 
-            for message in sorted(channel.messages, key=lambda msg: msg.message_id):
+            for message in sorted(channel.messages, key=lambda msg: msg.message_id)[-40:]:
                 inner['messages'].append({
                     'author': message.author.username,
                     'content': message.content,
