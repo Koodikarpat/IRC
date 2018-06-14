@@ -193,7 +193,6 @@ class Handler(SimpleHTTPRequestHandler):
 
         if latest is None:
             latest = 0
-        user.latest_update = time() * 1000
 
         try:
             messages = Channel.objects.get(channel_id=channel_id).messages
@@ -201,13 +200,14 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_status(HTTPStatus.NOT_FOUND, 'No channel with that ID')
 
         out = []
-        for message in messages:
-            if message.message_id >= latest:
+        for message in sorted(messages, key=lambda m: m.message_id):
+            if message.message_id > latest:
                 out.append({
                     'content': message.content,
                     'author': message.author.username,
                     'date': '{:%d.%m %H:%M}'.format(message.correct_time)
                 })
+                user.latest_update = message.message_id
 
         user.save()
         messages = json.dumps(out)
