@@ -406,7 +406,7 @@ function incomingChatMessage(author, timestamp, message, id) {
         previousMessageHasSameAuthor = '';
     }
 
-    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '" ondblclick="deleteMessage($(this))">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 
@@ -442,10 +442,6 @@ function incomingChatMessage(author, timestamp, message, id) {
             }
         }
     }
-
-    $(".message .messageContent").dblclick(function () {
-        deleteMessage($(this));
-    });
 
 }
 
