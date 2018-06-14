@@ -575,11 +575,11 @@ r
 {
     position: relative;
     top: -2px;
+    width: calc(100% - 74px);
 }
 
 .message.me .messageBody
 {
-    width: calc(100% - 74px);
     text-align: right;
 }
 
@@ -607,6 +607,7 @@ r
 	font-style: italic;
 	opacity: 0.5;
 	word-break: keep-all !important;
+	white-space: nowrap;
 }
 
 .message.me .messageBody .messageContent.deletedMessage
