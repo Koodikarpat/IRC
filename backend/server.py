@@ -177,7 +177,7 @@ class Handler(SimpleHTTPRequestHandler):
         channel = Channel.objects.get(channel_id=int(channel_id))
         message_id = int(form['message_id'])
 
-        for message in reversed(channel.messages):
+        for message in reversed(channel.messages[-40:]):
             if message.message_id == message_id:
                 if message.author != user:
                     return self.send_status(HTTPStatus.UNAUTHORIZED)
