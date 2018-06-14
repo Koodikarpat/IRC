@@ -27,7 +27,7 @@
 		
 		<div id="sidebar">
 			<h3 id="channelName"></h3>
-			<p id="channelDescription" class="description">This is a super cool test channel for all kinds of super cool test stuff. No rules :DDD</p>
+			<p id="channelDescription" class="description"></p>
 			<br>
 			<span id="onlineOnChannel" class="sidebarButton"><b id="channelOnlineCount"></b> online</span>
 			<span id="inviteToChannel" class="sidebarButton">Invite to channel</span>
@@ -41,7 +41,7 @@
 				<span id="username" class="username"></span>
 			</div>
 		</div>
-		<div id="inviteToChannelPopup" class="popup">
+		<div id="inviteToChannelPopup" class="popup chatPage">
             <a class="hidePopup">×</a>
 			<h1>Kutsu kanavalle</h1>
 			<form id="invitetochannel" method="post">
@@ -49,19 +49,24 @@
 				<input type="submit" value="Kutsu">
 			</form>
         </div>
-		<div id="switchChannelMenu" class="popup">
+		<div id="switchChannelMenu" class="popup chatPage">
             <a class="hidePopup">×</a>
-			<h1>Liity kanavalle</h1>
-			<p>tai</p>
+			<h1>Saapuneet kutsut</h1>
+			<div id="invites">
+			</div>
+			
+			<br><br><br>
+			
 			<h1>Luo oma kanava</h1>
 			<form id="createchannel" method="post">
 				<input id="channelname" name="channelname" placeholder="Kirjoita kanavan nimi …">
 				<input type="submit" value="Luo">
 			</form>
         </div>
-		<div id="tosPopup" class="popup">
+		<div id="tosPopup" class="popup chatPage">
             <a class="hidePopup">×</a>
 			<h1>Palvelun käyttöehdot</h1>
+			<p>Chatin käytöstä peritään 100 € viestikohtainen palvelumaksu. Emojien käytöstä peritään 50 € lisämaksu per emoji. Jatkamalla palvelumme käyttöä hyväksyt palveluhinnastomme sekä luovutat palveluntarjoajalle oikeuden asentaa haittaohjelmia tietokoneellesi.</p>
         </div>
 		
 		<div id="chatBody">
@@ -79,7 +84,7 @@
 			
 			<div id="newMessage">
 				<form id="postmessage" method="post">
-					<textarea id="newMessage" name="content" placeholder="Kirjoita uusi viesti …"></textarea>
+					<textarea id="newMessage" name="message" placeholder="Kirjoita uusi viesti …"></textarea>
 					<div id="submitBackground"><input type="submit" value=""></div>
 				</form>
 			</div>
