@@ -1,7 +1,6 @@
-$(document).ready(function () {
+var username = '';
 
-    var username = "aliylikoski";
-    var moderators = ["aliylikoski", "pekka", "matti"];
+$(document).ready(function () {
 
     $("#revealLogin").click(function () {
         $("#loginPopup").show();
@@ -478,6 +477,8 @@ window.onload = function () {
         })
         .then(function (json) {
             currentUsername = json['username'];
+            username = json['username'];
+            document.getElementById('username').innerHTML = '@' + username;
         });
 
     fetch('/channels/get', {
