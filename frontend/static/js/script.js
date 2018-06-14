@@ -236,50 +236,6 @@ $(document).ready(function () {
         $("#messages").scrollTop($("#messages")[0].scrollHeight);
     }
 
-
-    // Delete message
-
-    function deleteMessage(message) {
-
-        messageAuthor = message.closest(".messageBody").find(".username").text();
-        messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
-
-        moderatorReminder = '';
-        if (username !== messageAuthor) {
-            if (moderators.includes(username)) {
-                moderatorReminder = 'Olet poistamassa käyttäjän ' + messageAuthor + ' viestiä. Huomioi, että toisen käyttäjän viestin poistaminen on sallittua ainoastaan viestin sisällön ollessa chatin sääntöjen vastaista.\n\n';
-            } else {
-                alert('Sinulla ei ole oikeuksia poistaa käyttäjän ' + messageAuthor + ' viestiä. Voit poistaa ainoastaan omia viestejäsi.\n\nMikäli viesti mielestäsi rikkoo chatin sääntöjä, ota yhteyttä ylläpitoon.');
-                return;
-            }
-        }
-
-        var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + moderatorReminder + 'Paina OK poistaaksesi viesti.');
-        if (deleteMessageConfirmation) {
-            message.html("<i>This message was deleted.</i>");
-            if (username == messageAuthor) {
-                message.css({"color": "#777", "opacity": 0.5});
-            } else {
-                message.css({"color": "#DDD", "opacity": 0.5});
-            }
-
-            var xhr_deletemessage = new XMLHttpRequest();
-
-            xhr_deletemessage.open('POST', "/deletemessage/", true);
-
-            var object_deletemessage = {deletor: username, author: messageAuthor, messageId: message.attr("id")};
-            var json_deletemessage = JSON.stringify(object_deletemessage);
-
-            xhr_deletemessage.send(json_deletemessage);
-
-            xhr_deletemessage.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    console.log("UBER FANCY");
-                }
-            }
-        }
-    }
-
     // Logout / leave chat
 
     function logOut() {
@@ -453,7 +409,41 @@ function incomingChatMessage(author, timestamp, message) {
     document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span class="messageContent ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
-	
+
+
+    // Delete message
+
+    function deleteMessage(message) {
+
+        messageAuthor = message.closest(".messageBody").find(".username").text();
+        messageTimestamp = message.closest(".messageBody").find(".timestamp").text();
+
+        var deleteMessageConfirmation = confirm('Oletko varma, että haluat poistaa tämän viestin?\n\n	' + messageAuthor + ' ' + messageTimestamp + ': "' + message.text() + '"\n\n' + moderatorReminder + 'Paina OK poistaaksesi viesti.');
+        if (deleteMessageConfirmation) {
+            message.html("<i>This message was deleted.</i>");
+            if (username == messageAuthor) {
+                message.css({"color": "#777", "opacity": 0.5});
+            } else {
+                message.css({"color": "#DDD", "opacity": 0.5});
+            }
+
+            var xhr_deletemessage = new XMLHttpRequest();
+
+            xhr_deletemessage.open('POST', "/deletemessage/", true);
+
+            var object_deletemessage = {deletor: username, author: messageAuthor, messageId: message.attr("id")};
+            var json_deletemessage = JSON.stringify(object_deletemessage);
+
+            xhr_deletemessage.send(json_deletemessage);
+
+            xhr_deletemessage.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    console.log("UBER FANCY");
+                }
+            }
+        }
+    }
+
     $(".message .messageContent").dblclick(function () {
         deleteMessage($(this));
     });
