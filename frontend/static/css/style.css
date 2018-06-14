@@ -606,6 +606,7 @@ r
 {
 	font-style: italic;
 	opacity: 0.5;
+	word-break: keep-all !important;
 }
 
 .message.me .messageBody .messageContent.deletedMessage
@@ -680,10 +681,11 @@ r
 	word-break: break-all;
 }
 
-.message span.messageContent.bigEmojis
+.message span.messageContent.bigEmojis:not(.deletedMessage)
 {
     padding: 8px 4px;
 	padding-bottom: 4px;
+	width: 80% !important;
 	font-size: 28pt;
 	line-height: 100%;
 	background-color: transparent !important;
