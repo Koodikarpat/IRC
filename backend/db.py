@@ -32,7 +32,7 @@ class Message(Document):
 
 
 class Channel(Document):
-    name = fields.StringField(required=True)
+    name = fields.StringField(required=True, unique=True)
     channel_id = fields.IntField(required=True, default=ms_time)
     messages = fields.ListField(fields.ReferenceField(Message))
     users = fields.ListField(fields.ReferenceField(User))

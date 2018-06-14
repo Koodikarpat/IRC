@@ -1,4 +1,5 @@
 var username = '';
+var id = undefined;
 
 $(document).ready(function () {
 
@@ -269,7 +270,6 @@ $(document).ready(function () {
             var object_deletemessage = {deletor: username, author: messageAuthor, messageId: message.attr("id")};
             var json_deletemessage = JSON.stringify(object_deletemessage);
 
-            console.log(json_deletemessage);
             xhr_deletemessage.send(json_deletemessage);
 
             xhr_deletemessage.onreadystatechange = function () {
@@ -288,20 +288,19 @@ $(document).ready(function () {
     // Logout / leave chat
 
     function logOut() {
-        var xhr_logout = new XMLHttpRequest();
-
-        xhr_logout.open('POST', "/logout/", true);
-
-        xhr_logout.send();
-
-        xhr_logout.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                console.log("UBER FANCY, you are now logged out :D (at least I hope so)");
-            }
-        }
+        fetch('/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(function (response) {
+                if (response.redirected) {
+                    clearInterval(id);
+                    $(location).attr('href', '/authenticate.html');
+                }
+            });
     }
 
-    $(".logOut").click(function () {
+    $("#logOut").click(function () {
         logOut();
     });
 
@@ -449,7 +448,7 @@ function incomingChatMessage(author, timestamp, message) {
 
     previousMessageHasSameAuthor = document.getElementById('messages').lastChild.classList + '';
     previousMessageHasSameAuthor = previousMessageHasSameAuthor.toString();
-    console.log(previousMessageHasSameAuthor);
+
     if ((author == currentUsername && previousMessageHasSameAuthor.includes(' me ')) || previousMessageHasSameAuthor.includes(author)) {
         previousMessageHasSameAuthor = 'sameAuthorAsPreviousMessage';
     } else {
@@ -501,6 +500,10 @@ window.onload = function () {
         });
 
     function get_new() {
+        if (current_channel === 0) {
+            return;
+        }
+
         fetch('/channels/' + current_channel + '/getupdates', {
             method: 'POST',
             credentials: 'include'
@@ -519,5 +522,5 @@ window.onload = function () {
             })
     }
 
-    var id = setInterval(get_new, 1000);
+    id = setInterval(get_new, 1000);
 };

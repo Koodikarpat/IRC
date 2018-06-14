@@ -108,6 +108,13 @@ class Handler(SimpleHTTPRequestHandler):
 
         return user
 
+    def logout(self):
+        self.cookie['session_id'] = ''
+        self.cookie['session_id']['path'] = '/'
+        self.cookie['session_id']['max-age'] = -1
+        self.cookie['session_id']['expires'] = self.date_time_string(0)
+        self.send_header('Set-Cookie', self.cookie['session_id'].OutputString())
+
     @staticmethod
     def signup(form: dict):
         try:
@@ -355,6 +362,10 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_me()
             except errors.LoginError as e:
                 self.send_status(HTTPStatus.UNAUTHORIZED, str(e))
+        elif self.path in ('/logout', '/logout/'):
+            self.redirect('/authenticate.html')
+            self.logout()
+            self.end_headers()
         else:
             self.send_status()
 
