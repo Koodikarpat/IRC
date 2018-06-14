@@ -188,7 +188,8 @@ class Handler(SimpleHTTPRequestHandler):
             if message.message_id == message_id:
                 if message.author != user:
                     return self.send_status(HTTPStatus.UNAUTHORIZED)
-                message.content = 'Message deleted'
+                message.content = 'This message was deleted.'
+                message.deleted = True
                 message.save()
                 return self.send_status(HTTPStatus.OK)
         else:
@@ -277,7 +278,8 @@ class Handler(SimpleHTTPRequestHandler):
                     'author': message.author.username,
                     'content': message.content,
                     'id': message.message_id,
-                    'date': '{:%d.%m %H:%M}'.format(message.correct_time)
+                    'date': '{:%d.%m %H:%M}'.format(message.correct_time),
+                    'deleted': message.deleted
                 })
         return json.dumps(data)
 

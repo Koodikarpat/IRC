@@ -371,7 +371,7 @@ function fancyAlert(message) {
     $("#fancyAlert").delay(2000).animate({top: "-4%", opacity: "0"}, 200);
 }
 
-function incomingChatMessage(author, timestamp, message, id) {
+function incomingChatMessage(author, timestamp, message, id, deleted) {
 
     if (author == currentUsername) {
         me = "me";
@@ -405,8 +405,11 @@ function incomingChatMessage(author, timestamp, message, id) {
     } else {
         previousMessageHasSameAuthor = '';
     }
-
-    document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '" ondblclick="deleteMessage($(this))">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    if (deleted) {
+        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent deletedMessage ' + bigEmojis + '">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    } else {
+        document.getElementById('messages').insertAdjacentHTML('beforeend', '<div class="message ' + author + ' ' + me + ' ' + previousMessageHasSameAuthor + '" style="position:relative;' + meStyle + '"><img src="/static/img/avatar.jpg" class="avatar avatar1"><div class="messageBody"><div class="messageData"><span class="username">' + author + '</span> <span class="timestamp">' + timestamp + '</span></div><span id="' + id + '" class="messageContent ' + bigEmojis + '" ondblclick="deleteMessage($(this))">' + message + '</span></div><img src="/static/img/avatar.jpg" class="avatar avatar2"></div>');
+    }
     $("#messages").children().last().animate({left: "0", right: "0"}, 100);
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 
@@ -480,7 +483,7 @@ window.onload = function () {
             setChannelInformation(channel['name'], '', channel['users'].length)
 
             channel['messages'].forEach(function (message) {
-                incomingChatMessage(message['author'], message['date'], message['content'], message['id'])
+                incomingChatMessage(message['author'], message['date'], message['content'], message['id'], message['deleted'])
             });
         });
 
