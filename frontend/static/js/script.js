@@ -436,7 +436,7 @@ function deleteMessage(message) {
 		}
 		message.html("<i>This message was deleted.</i>");
 
-		message.css({"color": "#777", "opacity": 0.5});
+		message.addClass('deletedMessage');
 
 		var xhr_deletemessage = new XMLHttpRequest();
 
