@@ -455,7 +455,7 @@ function incomingChatMessage(author, timestamp, message) {
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 	
     $(".message .messageContent").dblclick(function () {
-        alert("Hello");
+        deleteMessage($(this));
     });
 
 }
